@@ -1,6 +1,6 @@
-# CS 6630 Fall 2016 Course Project Website
+# CS 6630 Fall 2016 Course Project Website (BoxOffice 360)
 
-## Aniraj Kesavan and Ashwini Janamatti
+## Aniraj Kesavan(u0996550) and Ashwini Janamatti(u0996548)
 
 ### Proposal
 
@@ -10,7 +10,7 @@ and documented over time from the [IMDb](http://www.imdb.com) Database.
 We'll primarily be relying on a curated dataset of 5000 movies.
 
 Start of the visualisation will include a timelapse showing a cloud of 
-all the movies recorded
+all the movies recorded()
 
 ![Background](figs/background.png)
 
@@ -21,7 +21,7 @@ for the year.
 ### Per year Visualisations
 
 There will be a main tab of visualisation for every year. Once you slide the slider
-to the corresponding year, it'll stabilise the view and arrange the charts.
+to the corresponding set of years, it'll stabilise the view and arrange the charts.
 ![Main Page](figs/year_sketch_1.pdf)
 There are three different navigations from the main page. 
 * Clicking on actor/director will get you the personal overlay tab, you can come back to the previous tab
@@ -48,6 +48,10 @@ associated with it. Clicking on a person will take you the Personal Overlay tab 
 on the genre/keyword will take you to a tab showing list of movies that have similar keywords 
 or fall under the same genre.
 ![Genre/Personal Overlay Tabs](figs/year_sketch_3.pdf)
+
+Deadlines
+
+Have the cloud ready by 20th of November and add additional features weekly and be done by November 30th
 
 
 
