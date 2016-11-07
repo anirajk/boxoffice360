@@ -3,6 +3,9 @@
 ## Aniraj Kesavan(u0996550) and Ashwini Janamatti(u0996548)
 
 ### Proposal
+Please Refer to [Proposal](./proposal.pdf) for the detailed 
+project proposal along with feedback , figures and timelines
+
 
 We will do a set of visualisations about various aspects of movies released 
 and documented over time from the [IMDb](http://www.imdb.com) Database.
@@ -10,9 +13,8 @@ and documented over time from the [IMDb](http://www.imdb.com) Database.
 We'll primarily be relying on a curated dataset of 5000 movies.
 
 Start of the visualisation will include a timelapse showing a cloud of 
-all the movies recorded()
+all the movies recorded
 
-![Background](figs/background.png)
 
 There will be a slider for showing the time lapse which will interact with 
 movie cloud. Once you finalise on an year, it will show a bunch of visualisations
@@ -22,7 +24,6 @@ for the year.
 
 There will be a main tab of visualisation for every year. Once you slide the slider
 to the corresponding set of years, it'll stabilise the view and arrange the charts.
-![Main Page](figs/year_sketch_1.pdf)
 There are three different navigations from the main page. 
 * Clicking on actor/director will get you the personal overlay tab, you can come back to the previous tab
 or navigate elsewhere
@@ -37,7 +38,6 @@ current movie. you can navigate to main page again clicking on a movie
 Key elements in this page are Highest Grossing Movies of the year which is an 
 interactive bar chart. It shows top 10 moveies which are scrollable to show more
 and when clicked on it, it will go to an overlay boxoffice tab
-![Boxoffice Overlay](figs/year_sketch_2.pdf)
 
 There is a tile chart of movies that are sorted by a metric (eg: Most popular), 
 the metric is toggleable to other metrics (eg: Most rating, most facebook likes) etc
@@ -47,11 +47,7 @@ Movie detail pane will have tiles showing actors/ other crew members and keyword
 associated with it. Clicking on a person will take you the Personal Overlay tab and Clicking
 on the genre/keyword will take you to a tab showing list of movies that have similar keywords 
 or fall under the same genre.
-![Genre/Personal Overlay Tabs](figs/year_sketch_3.pdf)
 
-Deadlines
-
-Have the cloud ready by 20th of November and add additional features weekly and be done by November 30th
 
 
 
