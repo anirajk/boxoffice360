@@ -1,3 +1,4 @@
+
 .show {
     display: inline;
 }
@@ -6,3 +7,41 @@
 
     display: none;
 }
+
+.icons {
+
+    border: #838383;
+
+
+}
+
+.mainContainer{
+
+    display: inline-block;
+    height: 30px;
+    width: 100px;
+    padding: 0px;
+
+}
+
+.firstimage{
+
+    margin-left: 43%;
+}
+
+.size{
+
+    height: 25px;
+    width: 30px;
+}
+
+html{
+
+    background-color: black;
+}
+
+p {
+
+    color: white;
+}
+
