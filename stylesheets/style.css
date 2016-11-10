@@ -35,6 +35,11 @@
     width: 30px;
 }
 
+.nodes circle {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
 html{
 
     background-color: black;
