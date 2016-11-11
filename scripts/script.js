@@ -27,12 +27,15 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
     var nodeX = width/5000;
     var nodeY = height/5000;
+    var yearList;
 
     csvData.forEach(function(d, i){
 
         d.actors = d.actor_1_name + ',' + d.actor_2_name + ',' + d.actor_3_name;
         d.x = nodeX * i * Math.random();
         d.y = nodeY * i * Math.random();
+
+        console.log(d);
     });
 
     var svg = d3.select('#bigbang')
