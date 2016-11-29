@@ -7,21 +7,32 @@ var width = 1500;
 
 function bigBang(csvData) {
 
+
+    var margin = {top: 30, right: 20, bottom: 30, left: 50};
+    var divelectoralVotes = d3.select("#bigbangsvg"); //.classed("content", true);
+    var svgBounds = divelectoralVotes.node().getBoundingClientRect();
+    var svgWidth = svgBounds.width - margin.left - margin.right;
+    var svgHeight = svgBounds.height - margin.top - margin.bottom;
+
+    console.log(svgBounds.height);
+
+
     var svg = d3.select('#bigbangsvg')
-        .attr('height', height)
-        .attr('width', width);
+        .attr('height', svgHeight)
+        .attr('width', svgWidth);
 
 
     var simulation = d3.forceSimulation()
         .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(width / 2, height / 2));
+        .force("center", d3.forceCenter(svgWidth / 2, svgHeight / 2));
 
     var node = svg.select("#bigbangg")
         .attr("class", "nodes")
         .selectAll("circle")
         .data(csvData);
 
-    node.exit().remove();
+    node.exit()
+        .remove();
 
     node = node.enter()
         .append("circle")
@@ -43,24 +54,26 @@ function bigBang(csvData) {
 
 function timeline(timelineArray, data){
     //var self = this;
-    margin = {top: 30, right: 20, bottom: 30, left: 50};
+    var margin = {top: 30, right: 20, bottom: 30, left: 50};
 
     //Gets access to the div element created for this chart from HTML
     var divelectoralVotes = d3.select("#timeline"); //.classed("content", true);
-    svgBounds = divelectoralVotes.node().getBoundingClientRect();
-    svgWidth = svgBounds.width - margin.left - margin.right;
-    svgHeight = 150;
+    var svgBounds = divelectoralVotes.node().getBoundingClientRect();
+    var svgWidth = svgBounds.width - margin.left - margin.right;
+    var svgHeight = 150;
+
+    var widthOfRect = svgWidth/(timelineArray.length);
 
     //creates svg element within the div
-    svg = divelectoralVotes.append("svg")
-        .attr("width",self.svgWidth)
-        .attr("height",self.svgHeight);
+    var svg = divelectoralVotes.append("svg")
+        .attr("width",svgWidth)
+        .attr("height",svgHeight);
 
     var xscale = d3.scaleLinear()
-        .rangeRound([0,self.svgWidth])
+        .rangeRound([0,svgWidth])
         .domain([0,d3.sum(timelineArray, function(d){
 
-            return 20;
+            return widthOfRect;
         })]);
 
 
@@ -79,13 +92,13 @@ function timeline(timelineArray, data){
     barsEnter
         .attr('x',function(d,i){
 
-            d.xscale = i*20;
-            return i*20;
+            d.xscale = i*widthOfRect;
+            return i*widthOfRect;
         })
-        .attr('y',self.svgHeight/3)
+        .attr('y',svgHeight/3)
         .attr('width', function(d){
 
-            return xscale(20);
+            return xscale(widthOfRect);
         })
         .attr('height', 40)
         //.attr('class', 'electoralVotes')
@@ -113,7 +126,7 @@ function timeline(timelineArray, data){
 
             //console.log(d);
 
-            return i*20 >= selection[0] && i*20 <= selection[1];
+            return i*widthOfRect >= selection[0] && i*widthOfRect <= selection[1];
         });
 
         console.log("year list");
@@ -134,10 +147,10 @@ function timeline(timelineArray, data){
 
     };
 
-    var brush = d3.brushX().extent([[0,0],[self.svgWidth,self.svgHeight]]).on("end", brushed);
+    var brush = d3.brushX().extent([[0,0],[svgWidth,svgHeight]]).on("end", brushed);
 
 
-    self.svg.append("g").attr("class", "brush").call(brush);
+    svg.append("g").attr("class", "brush").call(brush);
 
 }
 
