@@ -43,21 +43,39 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 })
 
 function updateVis(yearData) {
-
     console.log("Going to update visualisation for", yearData[0].title_year);
-    console.log("all urls");
-    var imgs = d3.select("#movie-tiles").append("svg");
-    for (i in yearData){
+    console.log("it has ",yearData.length," movies");
+    var i=0;
+    var requests = []
+    for (i=0;i< yearData.length;i++){
+        console.log("i before ajax:",i);
         var title = yearData[i].movie_imdb_link.split("/")[4];
         var url = "http://imdb.wemakesites.net/api/"+title;
         console.log("getting url");
-        $.getJSON(url,updatemovietiles);
+        var req = $.getJSON(url,function (response) {
+            console.log("image url:",response.data.image);
+            console.log("i in ajax",i);
+            updatetile("mtile-"+(i+1).toString(),response.data.image);
+        });
+        requests.push(req);
 
     }
+    $.when.apply(null, requests).done(function(){
+        console.log("all requests done");
+        console.log("responses");
+        for (x in requests){
+            console.log((requests[x].responseText["success"]))
+        }
+    })
 
 }
-function updatemovietiles(data) {
-    console.log("data",data);
-    console.log("image",document.images[0]);
-    console.log("image from get element",document.getElementById("mtile-1"));
+
+function updatetile(tileid,url) {
+    console.log("updating "+tileid);
+    var image = document.getElementById(tileid);
+    var downloadingImage = new Image();
+    downloadingImage.onload = function(){
+        image.src = this.src;
+    };
+    downloadingImage.src = url;
 }
