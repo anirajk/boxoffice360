@@ -7,8 +7,7 @@ var width = 1500;
 
 function bigBang(csvData) {
 
-    var svg = d3.select('#bigbang')
-        .append('svg')
+    var svg = d3.select('#bigbangsvg')
         .attr('height', height)
         .attr('width', width);
 
