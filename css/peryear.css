@@ -1,0 +1,10 @@
+img {
+    background: url(../img/loading.gif) 50% no-repeat;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.movie-tile{
+    width:250px;
+    height:250px;
+}

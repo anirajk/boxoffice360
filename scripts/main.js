@@ -8,7 +8,7 @@ else if(typeof XDomainRequest !== "undefined"){
     alert("CORS supported (XDR)");
 }else{
     //Time to retreat with a fallback or polyfill
-    alert("No CORS Support!");
+    alert("No CORS Support! Please enable CORS support before running");
 }
 
 
@@ -24,7 +24,6 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         }
     });
     yearList.sort();
-    var slider = d3.slider().min(d3.min(yearList)).max(d3.max(yearList)).ticks(10).showRange(true).value(d3.max(yearList)).callback(updateOnSliderChange);
     var slider = d3.slider().min(d3.min(yearList)).max(d3.max(yearList)).ticks(10).showRange(true).value(d3.max(yearList)).callback(updateOnSliderChange);
     d3.select('#year-slider').call(slider);
     console.log("len of csv data",csvData.length);
@@ -52,11 +51,13 @@ function updateVis(yearData) {
         var title = yearData[i].movie_imdb_link.split("/")[4];
         var url = "http://imdb.wemakesites.net/api/"+title;
         console.log("getting url");
-        $.getJSON(url,getdetails)
+        $.getJSON(url,updatemovietiles);
 
     }
 
 }
-function getdetails(data) {
+function updatemovietiles(data) {
     console.log("data",data);
+    console.log("image",document.images[0]);
+    console.log("image from get element",document.getElementById("mtile-1"));
 }
