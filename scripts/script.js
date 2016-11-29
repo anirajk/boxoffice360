@@ -20,10 +20,15 @@ function bigBang(csvData) {
     var node = svg.append("g")
         .attr("class", "nodes")
         .selectAll("circle")
-        .data(csvData)
-        .enter()
+        .data(csvData);
+
+    node.exit().remove();
+
+    node = node.enter()
         .append("circle")
-        .attr("r", 5)
+        .merge(node);
+
+    node.attr("r", 5)
         .attr("fill", 'gold');
 
     simulation
@@ -262,10 +267,13 @@ function timeline(timelineArray, data){
 
         var selection = d3.event.selection || 0;//brush.extent();
 
-        var yearData = timelineArray.filter(function(d){
+        console.log(selection);
 
-            console.log(d.xscale);
-            return d.xscale >= selection[0] && d.xscale <= selection[1];
+        var yearData = timelineArray.filter(function(d, i){
+
+            //console.log(d);
+
+            return i*20 >= selection[0] && i*20 <= selection[1];
         });
 
         console.log("year list");
@@ -275,7 +283,7 @@ function timeline(timelineArray, data){
 
         var movieData = data.filter(function (d) {
 
-            console.log(d);
+            //console.log(d);
             return yearData.includes(d.title_year);
 
         });
@@ -333,7 +341,7 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
     });
 
-    console.log(yearList);
+    //console.log(yearList);
 
     yearList.sort(function (a,b){
 
