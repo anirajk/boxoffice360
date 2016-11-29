@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/boxoffice360.iml" filepath="$PROJECT_DIR$/boxoffice360.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/boxoffice360.iml" filepath="$PROJECT_DIR$/.idea/boxoffice360.iml" />
     </modules>
   </component>
 </project>
