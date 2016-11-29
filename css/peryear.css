@@ -1,4 +1,8 @@
-.movie-tile img {
+img {
+    width:250px;
+    height:250px;
+}
+.movie-tile {
     width:250px;
     height:250px;
     background: url(../img/loading.gif) 50% no-repeat;
