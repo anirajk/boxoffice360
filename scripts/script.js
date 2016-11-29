@@ -16,7 +16,7 @@ function bigBang(csvData) {
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(width / 2, height / 2));
 
-    var node = svg.append("g")
+    var node = svg.select("#bigbangg")
         .attr("class", "nodes")
         .selectAll("circle")
         .data(csvData);
@@ -35,8 +35,8 @@ function bigBang(csvData) {
         .on('tick', function(){
 
             node
-                .attr("cx", function(d) { return d.x; })
-                .attr("cy", function(d) { return d.y; });
+                .attr("cx", function(d) { return d.fx; })
+                .attr("cy", function(d) { return d.fy; });
         });
 
 }
@@ -98,165 +98,6 @@ function timeline(timelineArray, data){
 
 
     //Display total count of electoral votes won by the Democrat and Republican party
-    //on top of the corresponding groups of bars.
-    //HINT: Use the .electoralVoteText class to style your text elements;  Use this in combination with
-    // chooseClass to get a color based on the party wherever necessary
-
-    //Display a bar with minimal width in the center of the bar chart to indicate the 50% mark
-    //HINT: Use .middlePoint class to style this bar.
-
-    /*var centerBar = d3.select('#electoral-vote')
-        .select('svg')
-        .selectAll('.middlePoint')
-        .data([2]);
-
-    centerBar.exit().remove();
-
-    centerBar = centerBar.enter()
-        .append('rect')
-        .classed('middlePoint',true)
-        .merge(centerBar);
-
-    centerBar
-        .attr('x', self.svgWidth/2)
-        .attr('width', function(d){
-            return d;
-        })
-        .attr('y', (0.25 * self.svgHeight))
-        .attr('height', (0.7 * self.svgHeight) - (0.25 * self.svgHeight) );
-
-    //Just above this, display the text mentioning the total number of electoral votes required
-    // to win the elections throughout the country
-    //HINT: Use .electoralVotesNote class to style this text element
-
-    //HINT: Use the chooseClass method to style your elements based on party wherever necessary.
-
-    var i_data = [];
-
-    i_data.sum = d3.sum(voteChartData,function(d){
-
-
-        if(d.RD_Difference == 0) {
-
-            return d.Total_EV;
-        }
-    });
-
-    i_data.party = 'I';
-
-    for(i=0;i<voteChartData.length;i++) {
-
-        if(voteChartData[i]['State_Winner'] == 'I') {
-
-            i_data.xscale = voteChartData[i].xscale;
-            break;
-        }
-    }
-
-    var d_data = [];
-    var count = 0;
-
-    d_data.sum = d3.sum(voteChartData,function(d){
-
-        if(d.State_Winner.toUpperCase() == 'D')
-            return d.Total_EV;
-    });
-    d_data.party = 'D';
-
-    //making the democratic to appear a little to the right because it was
-    // overlapping with the independent party for the year 1960
-
-    for(i=0;i<voteChartData.length;i++) {
-
-        if(voteChartData[i]['State_Winner'] == 'D') {
-
-            d_data.xscale = voteChartData[i].xscale;
-
-            count++;
-
-            if(count == 3)
-                break;
-
-        }
-    }
-
-    var r_data = [];
-
-    r_data.sum = d3.sum(voteChartData,function(d){
-
-        if(d.State_Winner.toUpperCase() == 'R')
-            return d.Total_EV;
-    });
-    r_data.party = 'R';
-
-    for(i=0;i<voteChartData.length;i++) {
-
-        if(voteChartData[i]['State_Winner'] == 'R') {
-
-            r_data.xscale = voteChartData[i].xscale;
-
-        }
-    }
-
-    var mid_point = [];
-    mid_point.sum = d3.sum(voteChartData,function(d){
-
-        return d.Total_EV;
-    });
-
-    mid_point.sum = Math.ceil(mid_point.sum/2);
-
-    mid_point.party = 'mid';
-
-    mid_point.xscale = (self.svgWidth/2) - 100;*/
-
-
-
-    /*var datafortext =  [d_data,r_data,mid_point];
-
-
-    if(i_data.sum > 0){
-
-        datafortext.push(i_data);
-    }
-
-    var text = d3.select('#timeline')
-        .select('svg')
-        //.selectAll('.electoralVoteText')
-        .data(datafortext);
-
-    text.exit().remove();
-
-    text = text.enter()
-        .append('text')
-        .merge(text);
-
-    text.attr('x',function(d){
-
-        return d.xscale;
-    })
-        .attr('y', (0.2 * self.svgHeight))
-        .attr('class',function(d){
-
-            if(d.party == 'mid')
-                return 'electoralVoteText';
-
-            return 'electoralVoteText ' + self.chooseClass(d.party);
-        })
-        .text(function(d){
-
-            if(d.party == 'mid')
-                return 'Electoral Vote('+d.sum+' needed to win)';
-            return d.sum;
-        });
-
-*/
-
-    //******* TODO: PART V *******
-    //Implement brush on the bar chart created above.
-    //Implement a call back method to handle the brush end event.
-    //Call the update method of shiftChart and pass the data corresponding to brush selection.
-    //HINT: Use the .brush class to style the brush.
 
     var brushed = function(){
 
@@ -330,8 +171,8 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     csvData.forEach(function(d, i){
 
         d.actors = d.actor_1_name + ',' + d.actor_2_name + ',' + d.actor_3_name;
-        d.x = nodeX * i * Math.random();
-        d.y = nodeY * i * Math.random();
+        d.fx = nodeX * i * Math.random();
+        d.fy = nodeY * i * Math.random();
 
         if(!yearList.includes(d.title_year)) {
 
