@@ -9,12 +9,10 @@ function bigBang(csvData) {
 
 
     var margin = {top: 30, right: 20, bottom: 30, left: 50};
-    var divelectoralVotes = d3.select("#bigbangsvg"); //.classed("content", true);
+    var divelectoralVotes = d3.select("#bigbang"); //.classed("content", true);
     var svgBounds = divelectoralVotes.node().getBoundingClientRect();
     var svgWidth = svgBounds.width - margin.left - margin.right;
-    var svgHeight = svgBounds.height - margin.top - margin.bottom;
-
-    console.log(svgBounds.height);
+    var svgHeight = window.innerHeight - margin.top - margin.bottom - 150 ;
 
 
     var svg = d3.select('#bigbangsvg')
@@ -52,9 +50,48 @@ function bigBang(csvData) {
 
 }
 
+function selectBoxFlooding(movies,actors) {
+
+    var list = d3.select('#select')
+        .selectAll('option')
+        .data(actors);
+
+    list.exit()
+        .remove();
+
+    list = list.enter()
+        .append('option')
+        .merge(list);
+
+    list.attr('value',(function(d) {
+
+        return d;
+
+        }))
+        .text(function(d){
+
+            return d;
+        });
+
+    d3.select('#select')
+        .on('change',function(d){
+
+            //console.log(d3.select('#select').property('value'));
+            var actor = d3.select('#select').property('value');
+
+            var nodes = movies.filter(function(d){
+
+               return (d.actor_1_name == actor || d.actor_2_name == actor || d.actor_3_name == actor);
+            });
+
+        });
+
+}
+
 function timeline(timelineArray, data){
     //var self = this;
     var margin = {top: 30, right: 20, bottom: 30, left: 50};
+    var actors = [];
 
     //Gets access to the div element created for this chart from HTML
     var divelectoralVotes = d3.select("#timeline"); //.classed("content", true);
@@ -109,18 +146,9 @@ function timeline(timelineArray, data){
         });
 
 
-
-    //Display total count of electoral votes won by the Democrat and Republican party
-
     var brushed = function(){
 
-        //var data = d3.event.selection || xscale.range();
-
-        //var y = xscale.domain(brush.empty() ? xscale.domain() : brush.extent());
-
         var selection = d3.event.selection || 0;//brush.extent();
-
-        console.log(selection);
 
         var yearData = timelineArray.filter(function(d, i){
 
@@ -129,20 +157,24 @@ function timeline(timelineArray, data){
             return i*widthOfRect >= selection[0] && i*widthOfRect <= selection[1];
         });
 
-        console.log("year list");
-        console.log(yearData);
-
-       // self.shiftChart.update(data);
 
         var movieData = data.filter(function (d) {
 
-            //console.log(d);
             return yearData.includes(d.title_year);
 
         });
-        console.log("movies");
-        console.log(movieData);
 
+        var actors = [];
+
+        movieData.forEach(function(d){
+
+            actors.push(d.actor_1_name);
+            actors.push(d.actor_2_name);
+            actors.push(d.actor_3_name);
+        });
+
+        //update the select box and the nodes in the force field
+        selectBoxFlooding(movieData, actors);
         bigBang(movieData);
 
     };
@@ -180,10 +212,11 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     var nodeX = width/5000;
     var nodeY = height/5000;
     var yearList = [];
+    var actors = [];
 
     csvData.forEach(function(d, i){
 
-        d.actors = d.actor_1_name + ',' + d.actor_2_name + ',' + d.actor_3_name;
+        //d.actors = d.actor_1_name + ',' + d.actor_2_name + ',' + d.actor_3_name;
         d.fx = nodeX * i * Math.random();
         d.fy = nodeY * i * Math.random();
 
@@ -194,14 +227,12 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
     });
 
-    //console.log(yearList);
-
     yearList.sort(function (a,b){
 
         return a-b;
     });
 
     timeline(yearList, csvData);
-    //bigBang(csvData);
+
 
 });
