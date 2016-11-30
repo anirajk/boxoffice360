@@ -49,7 +49,7 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         }
         var buttons = document.getElementById("sort-buttons");
         while (buttons.firstChild) {
-            buttons.removeChild(alltiles.firstChild);
+            buttons.removeChild(buttons.firstChild);
         }
         for (var i = 0; i < sortkeys.length; i++) {
             var but = document.createElement('input');
@@ -57,7 +57,7 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
             but.value = sortkeys[i];
             switch (sortkeys[i]) {
                 case "Sort by Rating":
-                    but.onclick = sortbyrating(yearData);
+                    but.onclick = function(){sortbyrating(yearData)};
                     but.id = "but-rating";
                     break;
                 case "Sort by Movie Facebook Likes":
@@ -104,6 +104,8 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         $.when(req).done(function (response) {
             updateImage(tileid, response.data.image, title)
         })
+
+
     }
 
     function generateBlanktilesandButtons(n) {
@@ -114,14 +116,23 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         }
         for (var i = 0; i < n; i++) {
             console.log('in loop generate blank tile');
-            var elem = document.createElement("img");
-            elem.setAttribute("src", "img/loading.gif");
-            elem.setAttribute("class", "movie-tile")
-            elem.setAttribute("id", "mtile-" + (i + 1).toString());
-            elem.setAttribute("height", "250");
-            elem.setAttribute("width", "250");
-            elem.setAttribute("alt", "Please Wait While image is loaded");
-            alltiles.appendChild(elem);
+            var div = document.createElement("div");
+            div.setAttribute("id", "mtile-"+(i+1).toString());
+            div.setAttribute("class", "movie-tile");
+
+            var img = document.createElement("img");
+            img.setAttribute("src", "img/loading.gif");
+            img.setAttribute("id", "img-mtile-"+(i+1).toString())
+            img.setAttribute("height", "250");
+            img.setAttribute("width", "250");
+            img.setAttribute("alt", "Please Wait While image is loaded");
+            var txt = document.createElement("span");
+            txt.innerHTML = "Please Wait";
+            txt.setAttribute("id", "txt-mtile-"+(i+1).toString());
+            txt.setAttribute("class", "movie-title");
+            div.appendChild(img);
+            div.appendChild(txt);
+            alltiles.appendChild(div);
         }
 
 
@@ -160,9 +171,9 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
     function updateImage(tileid, url, title) {
         console.log("updating " + tileid + " with ", title);
-        var tile = d3.select("#" + tileid);
+        var tile = d3.select("#" + tileid).select("img");
         tile.classed("movie-tile", true);
-        var image = document.getElementById(tileid);
+        var image = document.getElementById(tileid).firstChild;
         var downloadingImage = new Image();
         downloadingImage.onload = function () {
             image.src = this.src;
@@ -170,5 +181,8 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
             image.title = title;
         };
         downloadingImage.src = url;
+        var txt=d3.select('#'+tileid).select("#txt-"+tileid);
+        txt.innerHTML = title;
+
     }
 
