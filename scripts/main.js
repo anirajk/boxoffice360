@@ -25,7 +25,14 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         }
     });
     yearList.sort();
-    var slider = d3.slider().min(d3.min(yearList)).max(d3.max(yearList)).ticks(10).showRange(true).value(d3.max(yearList)).callback(updateOnSliderChange);
+    var slider = d3.slider()
+        .min(d3.min(yearList))
+        .max(d3.max(yearList))
+        .ticks(10)
+        .tickFormat(Math.ceil)
+        .showRange(true)
+        .value(d3.max(yearList))
+        .callback(updateOnSliderChange);
     d3.select('#year-slider').call(slider);
     console.log("len of csv data", csvData.length);
     function updateOnSliderChange(slider) {
@@ -40,38 +47,43 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         else {
             alert("No movies processed for year " + selectedYear);
         }
-        var alltiles = document.getElementById("movie-tiles");
+        var buttons = document.getElementById("sort-buttons");
+        while (buttons.firstChild) {
+            buttons.removeChild(alltiles.firstChild);
+        }
         for (var i = 0; i < sortkeys.length; i++) {
-            var but = document.createElement("button");
+            var but = document.createElement('input');
+            but.type = "button";
             but.value = sortkeys[i];
             switch (sortkeys[i]) {
                 case "Sort by Rating":
                     but.onclick = sortbyrating(yearData);
-                    but.id = "but-rating"
+                    but.id = "but-rating";
                     break;
                 case "Sort by Movie Facebook Likes":
-                    but.onclick = sortbylikes(yearData);
+                    but.onclick = function(){sortbylikes(yearData)};
                     but.id = "but-likes";
                     break;
                 case "Sort by Budget":
-                    but.onclick = sortbybudget(yearData);
+                    but.onclick = function(){sortbybudget(yearData);}
                     but.id = "but-budget";
                     break;
                 case "Sort by Duration":
-                    but.onclick = sortbyduration(yearData);
-                    but.id = "but-dutation";
+                    but.onclick = function(){sortbyduration(yearData)};
+                    but.id = "but-duration";
                     break;
             }
-            alltiles.appendChild(but);
+            buttons.appendChild(but);
+
         }
 
     }
 
 })
     function updateVis(yearData, text) {
-        console.log("Going to update visualisation for", yearData[0].title_year);
-        console.log("it has ", yearData.length, " movies");
-        console.log("first movie", yearData[0])
+        console.log("Going to update visualisation with",text);
+        //console.log("it has ", yearData.length, " movies");
+        //console.log("first movie", yearData[0])
         var requests = yearData.length;
         generateBlanktilesandButtons(yearData.length);
         var i = 0;
@@ -87,7 +99,7 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
     function updateTile(url, tileid, title) {
         var req = $.getJSON(url, function (response) {
-            console.log("image url:", response.data.image);
+            //console.log("image url:", response.data.image);
         });
         $.when(req).done(function (response) {
             updateImage(tileid, response.data.image, title)
@@ -123,14 +135,26 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     }
 
     function sortbylikes(yearData) {
+        yearData.sort(function (x, y) {
+            return d3.descending(parseInt(x.movie_facebook_likes), parseInt(y.movie_facebook_likes));
+        });
+        updateVis(yearData, "movie_facebook_likes");
 
     }
 
     function sortbybudget(yearData) {
+        yearData.sort(function (x, y) {
+            return d3.descending(parseInt(x.budget), parseInt(y.budget));
+        });
+        updateVis(yearData, "budget");
 
     }
 
     function sortbyduration(yearData) {
+        yearData.sort(function (x, y) {
+            return d3.descending(parseInt(x.duration), parseInt(y.duration));
+        });
+        updateVis(yearData, "duration");
 
     }
 

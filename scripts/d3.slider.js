@@ -84,11 +84,14 @@ d3.slider = function module() {
 
             var displayValue = null;
             if (tickFormat) {
-                displayValue = tickFormat(value);
+                displayValue = Math.ceil(value);
             } else {
-                displayValue = d3.format(",.0f")(value);
+                displayValue = Math.ceil(value);
             }
-
+            console.log('displayvalue',displayValue)
+            console.log('ticks',ticks);
+            console.log('tickvalues',tickValues);
+            console.log('tickForamt',tickFormat);
             dragger.append("text")
                 .attr("x", 0)
                 .attr("y", -15)
@@ -174,11 +177,13 @@ d3.slider = function module() {
             });
 
         var displayValue = null;
+        console.log('tickvaluesmove',tickValues);
         if (tickFormat) {
-            displayValue = tickFormat(value);
+            displayValue = Math.ceil(value);
         } else {
-            displayValue = d3.format(",.0f")(value);
+            displayValue = Math.ceil(value);
         }
+        console.log('dispmove', displayValue);
         svg.selectAll(".dragger").select("text")
             .text(displayValue);
 
