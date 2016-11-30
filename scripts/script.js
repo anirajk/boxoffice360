@@ -2,10 +2,11 @@
  * Created by Ashwini on 11/7/2016.
  */
 
-var height = 1000;
-var width = 1500;
+var height = window.innerHeight - 60;
+var width = d3.select("#bigbang").node().getBoundingClientRect().width - 70;
+var selectedMovies = [];
 
-function bigBang(csvData) {
+function bigBang(csvData, links) {
 
 
     var margin = {top: 30, right: 20, bottom: 30, left: 50};
@@ -24,8 +25,28 @@ function bigBang(csvData) {
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(svgWidth / 2, svgHeight / 2));
 
+    var link = svg.select('#bigbangg')
+        .selectAll('.link');
+
+
+    if(links) {
+
+        console.log('1');
+        simulation.force("link").links(links);
+
+        link.data(links);
+
+        line.exit()
+            .remove();
+
+        link = link.enter()
+            .append('line')
+            .merge(link)
+            .attr('class','link');
+    }
+
     var node = svg.select("#bigbangg")
-        .attr("class", "nodes")
+        .attr("class", "node")
         .selectAll("circle")
         .data(csvData);
 
@@ -36,11 +57,16 @@ function bigBang(csvData) {
         .append("circle")
         .merge(node);
 
-    node.attr("r", 5)
+    node.classed('node',true)
+        .attr("r", 5)
         .attr("fill", 'gold');
 
     simulation
         .nodes(csvData)
+        /*.attr('title',(function(d){
+
+            return d.movie_title ;
+        }))*/
         .on('tick', function(){
 
             node
@@ -52,6 +78,9 @@ function bigBang(csvData) {
 
 function selectBoxFlooding(movies,actors) {
 
+    console.log("1");
+
+    console.log(actors);
     var list = d3.select('#select')
         .selectAll('option')
         .data(actors);
@@ -77,11 +106,22 @@ function selectBoxFlooding(movies,actors) {
         .on('change',function(d){
 
             //console.log(d3.select('#select').property('value'));
-            var actor = d3.select('#select').property('value');
+            var actor = [];
+            actor.name = d3.select('#select').property('value');
+            actor.id = movies.length;
 
-            var nodes = movies.filter(function(d){
+            var links = [];
 
-               return (d.actor_1_name == actor || d.actor_2_name == actor || d.actor_3_name == actor);
+            selectedMovies = movies.filter(function(d){
+
+               return (d.actor_1_name == actor.name || d.actor_2_name == actor.name || d.actor_3_name == actor.name);
+            });
+
+            selectedMovies.push(actor);
+
+            selectedMovies.forEach(function (d) {
+
+                links.push({source: actor.id, target: d.id});
             });
 
         });
@@ -129,7 +169,7 @@ function timeline(timelineArray, data){
     barsEnter
         .attr('x',function(d,i){
 
-            d.xscale = i*widthOfRect;
+            //d.xscale = i*widthOfRect;
             return i*widthOfRect;
         })
         .attr('y',svgHeight/3)
@@ -163,6 +203,8 @@ function timeline(timelineArray, data){
             return yearData.includes(d.title_year);
 
         });
+
+        console.log(movieData);
 
         var actors = [];
 
@@ -209,8 +251,8 @@ d3.select('#tab2')
 
 d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
-    var nodeX = width/5000;
-    var nodeY = height/5000;
+    var nodeX = width/csvData.length;
+    var nodeY = height/csvData.length;
     var yearList = [];
     var actors = [];
 
@@ -220,12 +262,14 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         d.fx = nodeX * i * Math.random();
         d.fy = nodeY * i * Math.random();
 
+        d.id = i;
         if(!yearList.includes(d.title_year)) {
 
             yearList.push(d.title_year);
         }
 
     });
+
 
     yearList.sort(function (a,b){
 
