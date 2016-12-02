@@ -36,88 +36,75 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         }
     });
     console.log("dedup len", moviesData.length);
-    for (var i=0;i<moviesData.length;i++) {
+    var newData = [];
+    //var original_len = 3;
+    var original_len = moviesData.length;
+    var requests = original_len;
+    var i=0;
+    while(requests>0) {
         console.log("processing movie #",(i+1).toString());
-        var d=moviesData[i];
-        d.director_name = [d.director_name];
-        var url = "http://imdb.wemakesites.net/api/" + d.movie_imdb_link.split("/")[4];
+        moviesData[i].id = moviesData[i].movie_imdb_link.split("/")[4];
+        var url = "http://imdb.wemakesites.net/api/" + moviesData[i].id;
         console.log("url:",url);
-        jQuery.ajaxSetup({async:false});
+        getNewData(url);
+        i++;
+        requests--;
+    }
 
+    function getNewData(url) {
         var req = $.getJSON(url, function (response) {
-                console.log("original data:",d);
-                console.log("response data:", response.data);
+          //  console.log("response data:", response.data);
         });
         $.when(req).done(function (response) {
+            var d={};
             var details = response.data;
-            if (details.directors.length){
-                for (var j=0;j<details.directors.length;j++){
-                    if (details.directors[i]!= d.director_name[0]){
-                        d.director_name.push(details.directors[i])
-                    }
-                    }
-                }
             d.cast = (details.cast)?details.cast: [];
             d.review = (details.review)?details.review.text : "";
             d.writers = (details.writers)?details.writers :[];
             d.description = (details.description)?details.description: "";
             d.image_url = (details.image)?details.image : "";
-            })
-        jQuery.ajaxSetup({async:true});
-        enrichedData[i]=d;
+            d.directors = (details.directors)?details.directors:[];
+            d.id = (details.id)?details.id:"";
+            newData.push(d);
+            console.log("processed ",newData.length, " movies");
+            if (newData.length==original_len){
+                mergeData(newData);
+            }
+        })
+
     }
-    console.log("Writing enriched data,",enrichedData);
-    downloadCSV(enrichedData);
-    function convertArrayOfObjectsToCSV(args) {
-        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
 
-        data = args.data || null;
-        if (data == null || !data.length) {
-            return null;
+    function mergeData(data) {
+        console.log("merging data sets")
+        var merged_data = []
+        for  (var i=0;i<original_len;i++){
+            for (var j=0;j<original_len;j++){
+                if(moviesData[i].id==data[j].id){
+                    moviesData[i].directors = data[j].directors;
+                    moviesData[i].image_url = data[j].image_url  ;
+                    moviesData[i].review = data[j].review;
+                    moviesData[i].cast = data[j].cast;
+                    moviesData[i].description = data[j].description;
+                    merged_data.push(moviesData[i])
+                }
+            }
         }
-
-        columnDelimiter = args.columnDelimiter || ',';
-        lineDelimiter = args.lineDelimiter || '\n';
-
-        keys = Object.keys(data[0]);
-
-        result = '';
-        result += keys.join(columnDelimiter);
-        result += lineDelimiter;
-
-        data.forEach(function(item) {
-            ctr = 0;
-            keys.forEach(function(key) {
-                if (ctr > 0) result += columnDelimiter;
-
-                result += item[key];
-                ctr++;
-            });
-            result += lineDelimiter;
-        });
-
-        return result;
+        writejson(merged_data)
     }
-    function downloadCSV(args) {
-        var data, filename, link;
 
-        var csv = convertArrayOfObjectsToCSV({
-            data: enrichedData
-        });
-        if (csv == null) return;
 
-        filename = args.filename || 'enriched_data.csv';
 
-        if (!csv.match(/^data:text\/csv/i)) {
-            csv = 'data:text/csv;charset=utf-8,' + csv;
-        }
-        data = encodeURI(csv);
-
-        link = document.createElement('a');
-        link.setAttribute('href', data);
-        link.setAttribute('download', filename);
+    function writejson(data) {
+        console.log("final data len:", data.length);
+        console.log(data);
+        var json = JSON.stringify(data);
+        var blob = new Blob([json], {type: "application/json"});
+        var url  = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", "enriched_data.json");
+        document.body.appendChild(link); // Required for FF
         link.click();
     }
-    console.log("all done");
 
-})
+ })
