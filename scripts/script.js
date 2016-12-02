@@ -24,8 +24,6 @@ function bigBang(csvData, links) {
         .attr("class", "tooltip")
         .style("opacity", 0);
 
-    console.log(newData);
-
 
     var svg = d3.select('#bigbangsvg')
         .attr('height', svgHeight)
@@ -33,8 +31,8 @@ function bigBang(csvData, links) {
 
 
     var simulation = d3.forceSimulation()
-        .force("charge", d3.forceManyBody().strength(-200))
-        .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(40))
+        .force("charge", d3.forceManyBody().strength(-10).distanceMin(15).distanceMax(100))
+        .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(200))
         .force("center", d3.forceCenter(svgWidth / 2, svgHeight / 2))
         .on('tick',ticked);
 
@@ -66,50 +64,18 @@ function bigBang(csvData, links) {
 
         link = link.enter()
             .append('line')
-            .merge(link);
+            .merge(link)
+            .attr('class','link');
 
     }
-    /*else {
+    else {
 
-        simulation
-            .force("link")
-            .links([0]);
-
-        link = link.data([0]);
-
-        link.exit()
-            .remove();
-
-        link = link.enter()
-            .append('line')
-            .merge(link);
-
-    }*/
+        link.remove();
+    }
 
     var node = svg.select("#bigbangg")
-        .attr("class", "node")
-        .selectAll("circle")
+        .selectAll(".node")
         .data(newData.nodes);
-
-    node.on('mouseover',function (d) {
-
-            div.text(function () {
-
-                //console.log
-                if(d.tag == 'movie')
-                    return d.movie_title;
-                else
-                    return d.actor;
-            })
-            .style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY) + "px")
-                .attr('opacity',0.8);
-        })
-        .on("mouseout", function(d) {
-            div.transition()
-                .duration(500)
-                .style("opacity", 0);
-        });
 
 
     node
@@ -118,7 +84,30 @@ function bigBang(csvData, links) {
 
     node = node.enter()
         .append("circle")
-        .merge(node);
+        .merge(node)
+        .attr("class", function(d){
+
+            if(d.tag == 'actor')
+                return 'actor';
+            return 'node';
+        });
+
+    node.on('mouseover',function (d) {
+
+        div.text(function () {
+
+
+            if(d.tag == 'movie')
+                return d.movie_title;
+            return d.actor;
+            })
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY) + "px")
+            .style('opacity',0.9);
+        })
+        .on("mouseout", function() {
+            div.style("opacity", 0);
+        });
 
     node.classed('node',true)
         .attr("r", 7)
@@ -128,28 +117,28 @@ function bigBang(csvData, links) {
 
 
         node
-            .attr("cx", function(d) { return svgWidth/2; })
-            .attr("cy", function(d) { return svgHeight/2; })
-            .attr('opacity',0)
-            .attr("cx", function(d) { return d.fx; })
-            .attr("cy", function(d) { return d.fy; })
+
+            .attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; })
             .attr('opacity',1);
 
-        link
+        if(links) {
+            link
 
-            .attr("x1", function (d) {
-            return d.source.x;
-        })
-            .attr("y1", function (d) {
-                return d.source.y;
-            })
-            .attr("x2", function (d) {
-                return d.target.x;
-            })
-            .attr("y2", function (d) {
-                return d.target.y;
-            });
+                .attr("x1", function (d) {
 
+                    return d.source.x;
+                })
+                .attr("y1", function (d) {
+                    return d.source.y;
+                })
+                .attr("x2", function (d) {
+                    return d.target.x;
+                })
+                .attr("y2", function (d) {
+                    return d.target.y;
+                });
+        }
 
 
     }
@@ -264,6 +253,11 @@ function timeline(timelineArray, data){
         .merge(barsEnter);
 
     barsEnter
+        .on('mouseover',function (d) {
+
+
+
+        })
         .attr('x',function(d,i){
 
             //d.xscale = i*widthOfRect;
@@ -280,12 +274,19 @@ function timeline(timelineArray, data){
 
             return "#45AD6A";
 
-        });
+        })
+        /*.on('click',function (d) {
 
+            console.log(d);
+
+            brushed();
+        })*/;
 
     var brushed = function(){
 
         var selection = d3.event.selection || 0;//brush.extent();
+
+        //if(Math.abs(selection[0] - selection[1]));
 
 
         var yearData = timelineArray.filter(function(d, i){
@@ -302,19 +303,108 @@ function timeline(timelineArray, data){
 
         });
 
+        if(yearData.length > 4)
+            return;
+
+
+
         var actors = [];
 
         movieData.forEach(function(d){
 
             if(d.actor_1_name && !actors.includes(d.actor_1_name))
                 actors.push(d.actor_1_name);
+            //if(d.actor_2_name && !actors.includes(d.actor_2_name))
+                //actors.push(d.actor_2_name);
+            //if(d.actor_3_name && !actors.includes(d.actor_3_name))
+                //actors.push(d.actor_3_name);
+        });
+
+        movieData.forEach(function(d){
+
             if(d.actor_2_name && !actors.includes(d.actor_2_name))
                 actors.push(d.actor_2_name);
+            //if(d.actor_3_name && !actors.includes(d.actor_3_name))
+            //actors.push(d.actor_3_name);
+        });
+
+        movieData.forEach(function(d){
+
             if(d.actor_3_name && !actors.includes(d.actor_3_name))
                 actors.push(d.actor_3_name);
         });
 
+
+
+
+        function forces(){
+
+            var force = [];
+            var nodes = [];
+            var links = [];
+
+            var allmovies = [];
+            var new_actors = actors;
+
+            new_actors.forEach(function(d) {
+
+                var movies = [];
+
+                movieData.forEach(function (e) {
+
+                    //var movie = new Object();
+                    var flag = false;
+
+
+                    if(d == e.actor_1_name || d == e.actor_2_name || d == e.actor_3_name) {
+
+                        allmovies.forEach(function (f) {
+
+                            if (e.movie_title == f.movie_title)
+                                flag = true;
+
+                        });
+
+                        if(!flag) {
+
+                            var link = new Object();
+
+                            movies.push(e);
+                            link.source = 0;
+                            link.target = movies.length;
+                            links.push(link);
+                            allmovies.push(e);
+                        }
+                    }
+
+                });
+
+                var actorObject = new Object();
+                actorObject.name = d;
+                actorObject.tag = 'actor';
+                actorObject.id = 0;
+
+
+                if(movies.length>0)
+                    nodes.push([actorObject].concat(movies));
+
+                console.log(nodes);
+                console.log(links);
+
+                var forceobj = new Object();
+                forceobj.nodes = nodes;
+                forceobj.links = links;
+                force.push(force);
+            });
+
+
+            console.log('forces = ' + force);
+
+
+        }
         //update the select box and the nodes in the force field
+
+        //forces();
         selectBoxFlooding(movieData, actors);
         bigBang(movieData);
 
@@ -375,16 +465,18 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     var yearList = [];
     var actors = [];
 
+
+
     csvData.forEach(function(d, i){
 
         //d.actors = d.actor_1_name + ',' + d.actor_2_name + ',' + d.actor_3_name;
 
         var x = nodeX * i * Math.random();
         var y = nodeY * i * Math.random();
-        d.fx = (x < 7)? (x + 7) : x;
-        d.fy = (y < 7)? (y + 7) : y;
-        d.x = nodeX * i * Math.random();
-        d.y = nodeY * i * Math.random();
+        //d.x = (x < 7)? (x + 7) : x;
+        //d.y = (y < 7)? (y + 7) : y;
+        //d.x = nodeX * i * Math.random();
+        //d.y = nodeY * i * Math.random();
 
 
         d.tag = 'movie';

@@ -42,7 +42,7 @@
 
 html {
     
-    background-image: url("../img/background-15.jpg");
+    background-image: url("../img/light-green-website-plain-background-for-website-560540430.jpg");
 }
 
 p {
@@ -55,6 +55,19 @@ p {
     stroke-width: 2px;
 }
 
+.actor {
+
+    fill: red;
+    stroke: #000;
+    stroke-width: 2px;
+}
+
+.node:hover {
+
+    stroke:firebrick;
+    stroke-width: 5px;
+}
+
 line {
     stroke: #000;
     stroke-width: 2px;
@@ -63,5 +76,45 @@ line {
 .link {
     stroke: #000;
     stroke-width: 2px;
+}
+
+.link:hover {
+
+    stroke: blue;
+    stroke-width: 4px;
+
+}
+
+#wrapper{
+
+    margin-left: 10%;
+    margin-right: 10%;
+    background-color: #fff;
+    opacity: 0.65;
+}
+
+#wrapper div, select{
+
+    margin-top : 20px;
+    margin-left: 20px;
+}
+
+h3,h1 {
+
+    color: firebrick;
+    text-align: center;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto ;
+    padding: 2px;
+    font: 12px comic sans;
+    background: steelblue;
+    border: 0px;
+
+    pointer-events: none;
 }
 
