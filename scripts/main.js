@@ -26,8 +26,6 @@ function updateBarChart(data) {
         yAxisHeight = 450;
 
 
-
-
     var width = xAxisWidth - margin.left - margin.right;
     var height = yAxisHeight - margin.top - margin.bottom;
 
@@ -205,7 +203,8 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         var i = 0;
         while (requests > 0) {
             var url = "http://imdb.wemakesites.net/api/" + yearData[i].movie_imdb_link.split("/")[4];
-
+            if (i==0)
+                console.log("data:",yearData[i])
             if(yearData[i].src)
                 updateImage("mtile-" + (i + 1).toString(), yearData[i].src, yearData[i][text], yearData[i].movie_title);
             else
@@ -218,7 +217,8 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
     function updateTile(url, tileid, title, movie_name ) {
         var req = $.getJSON(url, function (response) {
-            //console.log("image url:", response.data.image);
+            if (tileid=="mtile-1")
+                console.log("response data:", response.data);
         });
         $.when(req).done(function (response) {
             updateImage(tileid, response.data.image, title, movie_name)
@@ -229,29 +229,17 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
     function generateBlanktilesandButtons(n) {
         //console.log("generating ", n, " blank tiles");
-        var alltiles = document.getElementById("movie-tiles");
-        while (alltiles.firstChild) {
-            alltiles.removeChild(alltiles.firstChild);
-        }
-        for (var i = 0; i < n; i++) {
-            console.log('in loop generate blank tile');
-            var div = document.createElement("div");
-            div.setAttribute("id", "mtile-"+(i+1).toString());
-            div.setAttribute("class", "movie-tile");
+        var mtiles = d3.select("movie-tiles");
+        mtiles.selectAll("svg").remove();
+        for (var i=0;i<10;i++){
+            if (n<i){
+                var tile=d3.select("#mtile-")
+            }
+            var tile=d3.select("#mtile-"+(i+1).toString());
+            tile.append("img");
+            tile.append("text")
+                .text("Please Wait");
 
-            var img = document.createElement("img");
-            img.setAttribute("src", "img/loading.gif");
-            img.setAttribute("id", "img-mtile-"+(i+1).toString())
-            img.setAttribute("height", "250");
-            img.setAttribute("width", "250");
-            img.setAttribute("alt", "Please Wait While image is loaded");
-            var txt = document.createElement("span");
-            txt.innerHTML = "Please Wait";
-            txt.setAttribute("id", "txt-mtile-"+(i+1).toString());
-            txt.setAttribute("class", "movie-title");
-            div.appendChild(img);
-            div.appendChild(txt);
-            alltiles.appendChild(div);
        }
 
 
