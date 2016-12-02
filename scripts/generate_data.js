@@ -41,10 +41,13 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     var original_len = moviesData.length;
     var requests = original_len;
     var i=0;
+    var failcount=0;
     while(requests>0) {
         console.log("processing movie #",(i+1).toString());
         moviesData[i].id = moviesData[i].movie_imdb_link.split("/")[4];
-        var url = "http://imdb.wemakesites.net/api/" + moviesData[i].id;
+
+        var url = "http://www.omdbapi.com/?i="+moviesData[i].id;
+        //    var url = "http://imdb.wemakesites.net/api/" + moviesData[i].id;
         console.log("url:",url);
         getNewData(url);
         i++;
@@ -54,20 +57,28 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     function getNewData(url) {
         var req = $.getJSON(url, function (response) {
           //  console.log("response data:", response.data);
+        }).fail(function(response) {
+            failcount++;
+            console.log("request failed, current fail count:",failcount);
         });
         $.when(req).done(function (response) {
+            console.log('response',response);
             var d={};
-            var details = response.data;
-            d.cast = (details.cast)?details.cast: [];
-            d.review = (details.review)?details.review.text : "";
-            d.writers = (details.writers)?details.writers :[];
-            d.description = (details.description)?details.description: "";
-            d.image_url = (details.image)?details.image : "";
-            d.directors = (details.directors)?details.directors:[];
-            d.id = (details.id)?details.id:"";
+             d.cast = (response.Actors)?response.Actors: "";
+             d.awards = (response.Awards)?response.Awards: "";
+             d.country = (response.Country)?response.Country: "";
+             d.director = (response.Director)?response.Director: "";
+             d.metascore = (response.Metascore)?response.Metascore: "";
+             d.image_url = (response.Poster)?response.Poster: "";
+            d.rated = (response.Rated)?response.Rated: "";
+            d.id = (response.imdbID)?response.imdbID: "";
+            d.rating = (response.imdbRating)?response.imdbRating: "";
+            d.totalvotes = (response.imdbVotes)?response.imdbVotes: "";
+            d.writer = (response.Writer)?response.Writer: "";
+            d.languages = (response.Language)?response.Language: "";
             newData.push(d);
-            console.log("processed ",newData.length, " movies");
-            if (newData.length==original_len){
+            console.log("processed ",newData.length, " movies",newData);
+            if (newData.length+failcount>=original_len){
                 mergeData(newData);
             }
         })
@@ -84,7 +95,13 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
                     moviesData[i].image_url = data[j].image_url  ;
                     moviesData[i].review = data[j].review;
                     moviesData[i].cast = data[j].cast;
-                    moviesData[i].description = data[j].description;
+                    moviesData[i].plot = data[j].plot;
+                    moviesData[i].awards = data[i].awards;
+                    moviesData[i].metascore = data[i].metascore;
+                    moviesData[i].rated = data[j].rated;
+                    moviesData[i].totalvotes = data[j].totalvotes;
+                    moviesData[i].writer = data[i].writer;
+                    moviesData[i].languages = data[i].languages;
                     merged_data.push(moviesData[i])
                 }
             }
