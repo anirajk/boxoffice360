@@ -43,6 +43,7 @@
 html {
     
     background-image: url("../img/light-green-website-plain-background-for-website-560540430.jpg");
+    background-size:cover;
 }
 
 p {
@@ -57,14 +58,14 @@ p {
 
 .actor {
 
-    fill: red;
+    fill: firebrick;
     stroke: #000;
     stroke-width: 2px;
 }
 
 .node:hover {
 
-    stroke:firebrick;
+    stroke:green;
     stroke-width: 5px;
 }
 
@@ -83,8 +84,6 @@ line {
 
     margin-left: 10%;
     margin-right: 10%;
-    background-color: #fff;
-    opacity: 0.65;
 }
 
 #wrapper div, select{
@@ -93,7 +92,7 @@ line {
     margin-left: 20px;
 }
 
-h3,h1 {
+h3,h1,h2,h4,h5 {
 
     color: firebrick;
     text-align: center;
@@ -110,5 +109,10 @@ div.tooltip {
     border: 0px;
 
     pointer-events: none;
+}
+
+#wrapper select {
+
+    margin-left:45%;
 }
 
