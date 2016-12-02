@@ -15,7 +15,7 @@
 var sortkeys = ["Sort by Rating", "Sort by Movie Facebook Likes", "Sort by Budget", "Sort by Duration"];
 var selectedYear=1985;
 var moviesData;
-
+var jSONData;
 
 function updateBarChart(data) {
 
@@ -108,10 +108,15 @@ function updateBarChart(data) {
 
 d3.csv("data/movie_metadata.csv", function (error, csvData) {
     var yearList = [];
-
-    moviesData = [];
-    console.log("csv len",csvData.length);
-    csvData.forEach(function (d) {
+    moviesData = csvData;
+    $.ajaxSetup({async:false});
+    $.getJSON("data/enriched_data.json", function () {
+        
+    }).done(function (response) {
+        jSONData=response;
+    });
+    $.ajaxSetup({async:true});
+    moviesData.forEach(function (d) {
         var i,count=0;
         for (i=0;i<moviesData.length;i++){
             if (d.movie_imdb_link == moviesData[i].movie_imdb_link){
@@ -121,21 +126,56 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         if ( count == 0){
             moviesData.push(d);
         }else if (count>0){
-            console.log('dup');
+            console.log('dup');[]
         }else{
             console.log('shit broke');
         }
     });
-    console.log("moviedata len",moviesData.length);
-    moviesData.forEach(function (d, i) {
-        d.actors = d.actor_1_name + ',' + d.actor_2_name + ',' + d.actor_3_name;
-        if (yearList.indexOf(d.title_year) === -1) {
-            if (d.title_year) {
-                yearList.push(d.title_year);
+    console.log("csv data elem", moviesData[0]);
+    console.log("json data elem", jSONData[0]);
+    for (var i=0;i<moviesData.length;i++){
+        moviesData[i].directors = "NA";
+        moviesData[i].image_url = "NA";
+        moviesData[i].review = "NA";
+        moviesData[i].cast = "NA";
+        moviesData[i].plot = "NA";
+        moviesData[i].awards = "NA";
+        moviesData[i].metascore = "NA";
+        moviesData[i].rated = "NA";
+        moviesData[i].totalvotes = "NA";
+        moviesData[i].writer = "NA";
+        moviesData[i].languages = "NA";
+    }
+    console.log(jSONData[4765]);
+    for (var i=0;i<moviesData.length;i++){
+        for(var j=0;j<jSONData.length;j++){
+            if(moviesData[i].movie_imdb_link.split("/")[4]==jSONData[j].id){
+                moviesData[i].directors = jSONData[j].directors?jSONData[j].directors:"NA";
+                moviesData[i].image_url = jSONData[j].image_url?jSONData[j].image_url:"NA"  ;
+                moviesData[i].review = jSONData[j].review?jSONData[j].image_url:"NA";
+                moviesData[i].cast = jSONData[j].cast?jSONData[j].cast:"NA";
+                moviesData[i].plot = jSONData[j].plot?jSONData[j].plot:"NA";
+                moviesData[i].awards = jSONData[j].awards?jSONData[j].awards:"NA";
+                moviesData[i].metascore = jSONData[j].metascore?jSONData[j].metascore:"NA";
+                moviesData[i].rated = jSONData[j].rated?jSONData[j].rated:"NA";
+                moviesData[i].totalvotes = jSONData[j].totalvotes?jSONData[j].totalvotes:"NA";
+                moviesData[i].writer = jSONData[j].writer?jSONData[j].writer:"NA";
+                moviesData[i].languages = jSONData[j].languages?jSONData[j].languages:"NA";
+                // console.log("processed",(i+1).toString(), "rhs ",j);
             }
         }
-    });
+    }
+    console.log("moviedata len",moviesData.length);
+    console.log("merged data elem", moviesData[0]);
+    // yearList = moviesData.filter(function(d,i))
+    moviesData.forEach(function (d, i) {
+        if(!yearList.includes(d.title_year) && d.title_year) {
+            yearList.push(d.title_year);
+        }
 
+
+    });
+    console.log("years",yearList.length)
 
     yearList.sort();
     var slider = d3.slider()
@@ -205,10 +245,10 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
             var url = "http://imdb.wemakesites.net/api/" + yearData[i].movie_imdb_link.split("/")[4];
             if (i==0)
                 console.log("data:",yearData[i])
-            if(yearData[i].src)
-                updateImage("mtile-" + (i + 1).toString(), yearData[i].src, yearData[i][text], yearData[i].movie_title);
+            if(yearData[i].image_url)
+                updateImage("mtile-" + (i + 1).toString(), yearData[i].image_url, yearData[i][text], yearData[i].movie_title);
             else
-                updateTile(url, "mtile-" + (i + 1).toString(), yearData[i][text], yearData[i].movie_title);
+                console.log("broke");
             i++;
             requests--;
         }
