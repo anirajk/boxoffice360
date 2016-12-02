@@ -144,6 +144,8 @@ function bigBang(forces) {
 
 }
 
+
+
 function selectBoxFlooding(movies,actors) {
 
     //actor
@@ -283,15 +285,14 @@ function timeline(timelineArray, data){
         .attr('x',function(d,i){
 
             //d.xscale = i*widthOfRect;
-            if(i==0)
+
                 return i*widthOfRect;
-            else
-                return i*widthOfRect + 1;
+
         })
         .attr('y',svgHeight/3)
         .attr('width', function(d){
 
-            return xscale(widthOfRect);
+            return xscale(widthOfRect) * 0.9;
         })
         .attr('height', 40)
         //.attr('class', 'electoralVotes')

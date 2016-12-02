@@ -21,6 +21,7 @@
     height: 30px;
     width: 100px;
     padding: 0px;
+    outline: none;
 
 }
 
@@ -94,7 +95,7 @@ line {
 
 h3,h1,h2,h4,h5 {
 
-    color: firebrick;
+    color: #fff;
     text-align: center;
 }
 
@@ -113,6 +114,9 @@ div.tooltip {
 
 #wrapper select {
 
-    margin-left:45%;
+    margin-left:45% ;
+    width: 150px;
+    color: indigo;
 }
+
 

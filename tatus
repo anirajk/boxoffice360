@@ -1,0 +1,124 @@
+[1mdiff --git a/.idea/workspace.xml b/.idea/workspace.xml[m
+[1mindex ed82e70..a6089cc 100644[m
+[1m--- a/.idea/workspace.xml[m
+[1m+++ b/.idea/workspace.xml[m
+[36m@@ -2,11 +2,7 @@[m
+ <project version="4">[m
+   <component name="ChangeListManager">[m
+     <list default="true" id="417e3b52-3966-445d-8bed-3817ca32bcb9" name="Default" comment="">[m
+[31m-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/treescript.js" />[m
+[31m-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />[m
+[31m-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.html" afterPath="$PROJECT_DIR$/main.html" />[m
+[31m-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/newscript.js" afterPath="$PROJECT_DIR$/scripts/newscript.js" />[m
+[31m-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/stylesheets/style.css" afterPath="$PROJECT_DIR$/stylesheets/style.css" />[m
+[32m+[m[32m      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/treescript.js" afterPath="$PROJECT_DIR$/scripts/treescript.js" />[m
+     </list>[m
+     <ignored path="boxoffice360.iws" />[m
+     <ignored path=".idea/workspace.xml" />[m
+[36m@@ -41,8 +37,8 @@[m
+       <file leaf-file-name="treescript.js" pinned="false" current-in-tab="false">[m
+         <entry file="file://$PROJECT_DIR$/scripts/treescript.js">[m
+           <provider selected="true" editor-type-id="text-editor">[m
+[31m-            <state relative-caret-position="680">[m
+[31m-              <caret line="286" column="36" lean-forward="false" selection-start-line="286" selection-start-column="36" selection-end-line="286" selection-end-column="36" />[m
+[32m+[m[32m            <state relative-caret-position="663">[m
+[32m+[m[32m              <caret line="176" column="37" lean-forward="true" selection-start-line="176" selection-start-column="37" selection-end-line="176" selection-end-column="37" />[m
+               <folding />[m
+             </state>[m
+           </provider>[m
+[36m@@ -82,8 +78,8 @@[m
+       <file leaf-file-name="main.html" pinned="false" current-in-tab="true">[m
+         <entry file="file://$PROJECT_DIR$/main.html">[m
+           <provider selected="true" editor-type-id="text-editor">[m
+[31m-            <state relative-caret-position="561">[m
+[31m-              <caret line="33" column="77" lean-forward="false" selection-start-line="33" selection-start-column="77" selection-end-line="33" selection-end-column="77" />[m
+[32m+[m[32m            <state relative-caret-position="102">[m
+[32m+[m[32m              <caret line="6" column="57" lean-forward="true" selection-start-line="6" selection-start-column="57" selection-end-line="6" selection-end-column="57" />[m
+               <folding />[m
+             </state>[m
+           </provider>[m
+[36m@@ -228,6 +224,20 @@[m
+               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />[m
+             </PATH_ELEMENT>[m
+             <PATH_ELEMENT>[m
+[32m+[m[32m              <option name="myItemId" value="figs" />[m
+[32m+[m[32m              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />[m
+[32m+[m[32m            </PATH_ELEMENT>[m
+[32m+[m[32m          </PATH>[m
+[32m+[m[32m          <PATH>[m
+[32m+[m[32m            <PATH_ELEMENT>[m
+[32m+[m[32m              <option name="myItemId" value="boxoffice360" />[m
+[32m+[m[32m              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />[m
+[32m+[m[32m            </PATH_ELEMENT>[m
+[32m+[m[32m            <PATH_ELEMENT>[m
+[32m+[m[32m              <option name="myItemId" value="boxoffice360" />[m
+[32m+[m[32m              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />[m
+[32m+[m[32m            </PATH_ELEMENT>[m
+[32m+[m[32m            <PATH_ELEMENT>[m
+               <option name="myItemId" value="data" />[m
+               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />[m
+             </PATH_ELEMENT>[m
+[36m@@ -270,13 +280,16 @@[m
+       <recent name="C:\Users\Owner\Documents\GitHub\boxoffice360" />[m
+     </key>[m
+   </component>[m
+[31m-  <component name="RunManager" selected="JavaScript Debug.main.html">[m
+[32m+[m[32m  <component name="RunManager" selected="JavaScript Debug.index.html">[m
+     <configuration default="false" name="main.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/boxoffice360/main.html">[m
+       <method />[m
+     </configuration>[m
+     <configuration default="false" name="peryear.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/boxoffice360/peryear.html">[m
+       <method />[m
+     </configuration>[m
+[32m+[m[32m    <configuration default="false" name="index.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/boxoffice360/overlay_example/FullscreenOverlayStyles/index.html">[m
+[32m+[m[32m      <method />[m
+[32m+[m[32m    </configuration>[m
+     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">[m
+       <method />[m
+     </configuration>[m
+[36m@@ -336,14 +349,16 @@[m
+       <recursive>false</recursive>[m
+       <method />[m
+     </configuration>[m
+[31m-    <list size="2">[m
+[32m+[m[32m    <list size="3">[m
+       <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.main.html" />[m
+       <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.peryear.html" />[m
+[32m+[m[32m      <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.index.html" />[m
+     </list>[m
+     <recent_temporary>[m
+[31m-      <list size="2">[m
+[31m-        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.main.html" />[m
+[31m-        <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.peryear.html" />[m
+[32m+[m[32m      <list size="3">[m
+[32m+[m[32m        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.index.html" />[m
+[32m+[m[32m        <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.main.html" />[m
+[32m+[m[32m        <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.peryear.html" />[m
+       </list>[m
+     </recent_temporary>[m
+   </component>[m
+[36m@@ -380,12 +395,12 @@[m
+       <workItem from="1480642027472" duration="288000" />[m
+       <workItem from="1480651851058" duration="6527000" />[m
+       <workItem from="1480658805685" duration="5434000" />[m
+[31m-      <workItem from="1480683457829" duration="23480000" />[m
+[32m+[m[32m      <workItem from="1480683457829" duration="25323000" />[m
+     </task>[m
+     <servers />[m
+   </component>[m
+   <component name="TimeTrackingManager">[m
+[31m-    <option name="totallyTimeSpent" value="80105000" />[m
+[32m+[m[32m    <option name="totallyTimeSpent" value="81948000" />[m
+   </component>[m
+   <component name="TodoView">[m
+     <todo-panel id="selected-file">[m
+[36m@@ -397,12 +412,13 @@[m
+     </todo-panel>[m
+   </component>[m
+   <component name="ToolWindowManager">[m
+[31m-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="1" />[m
+[32m+[m[32m    <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />[m
+     <editor active="true" />[m
+     <layout>[m
+       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />[m
+       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weigh
