@@ -23,10 +23,6 @@ button {
 .movie-tile span{
     text-align:center;
     display:block;
-#barChart {
-
-    float: left;
-    width: 650px;
     height: 450px;
     border: 1.5px solid;
 }

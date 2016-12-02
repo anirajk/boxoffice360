@@ -111,9 +111,25 @@ function updateBarChart(data) {
 d3.csv("data/movie_metadata.csv", function (error, csvData) {
     var yearList = [];
 
-    moviesData = csvData;
-
-    csvData.forEach(function (d, i) {
+    moviesData = [];
+    console.log("csv len",csvData.length);
+    csvData.forEach(function (d) {
+        var i,count=0;
+        for (i=0;i<moviesData.length;i++){
+            if (d.movie_imdb_link == moviesData[i].movie_imdb_link){
+                count++;
+            }
+        }
+        if ( count == 0){
+            moviesData.push(d);
+        }else if (count>0){
+            console.log('dup');
+        }else{
+            console.log('shit broke');
+        }
+    });
+    console.log("moviedata len",moviesData.length);
+    moviesData.forEach(function (d, i) {
         d.actors = d.actor_1_name + ',' + d.actor_2_name + ',' + d.actor_3_name;
         if (yearList.indexOf(d.title_year) === -1) {
             if (d.title_year) {
@@ -138,7 +154,7 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     function updateOnSliderChange(slider) {
         var year = Math.ceil(slider.value());
         selectedYear = year;
-        var yearData = csvData.filter(function (d) {
+        var yearData = moviesData.filter(function (d) {
             return d.title_year == year;
         });
         if (yearData.length >= 1) {
@@ -183,26 +199,29 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
 });
     function updateVis(yearData, text) {
-
+        console.log("updating vis with ", yearData.length, " tiles");
         var requests = yearData.length;
         generateBlanktilesandButtons(yearData.length);
         var i = 0;
         while (requests > 0) {
             var url = "http://imdb.wemakesites.net/api/" + yearData[i].movie_imdb_link.split("/")[4];
-            updateTile(url, "mtile-" + (i + 1).toString(), yearData[i][text]);
-            // updatetile("mtile-"+(i+1).toString(),imageurl,yearData[i].movie_title);
+
+            if(yearData[i].src)
+                updateImage("mtile-" + (i + 1).toString(), yearData[i].src, yearData[i][text], yearData[i].movie_title);
+            else
+                updateTile(url, "mtile-" + (i + 1).toString(), yearData[i][text], yearData[i].movie_title);
             i++;
             requests--;
         }
 
     }
 
-    function updateTile(url, tileid, title) {
+    function updateTile(url, tileid, title, movie_name ) {
         var req = $.getJSON(url, function (response) {
             //console.log("image url:", response.data.image);
         });
         $.when(req).done(function (response) {
-            updateImage(tileid, response.data.image, title)
+            updateImage(tileid, response.data.image, title, movie_name)
         })
 
 
@@ -269,8 +288,8 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
     }
 
-    function updateImage(tileid, url, title) {
-        console.log("updating " + tileid + " with ", title);
+    function updateImage(tileid, url, title, movie_name) {
+        console.log("updating " + tileid + " with ", title, " for movie name",movie_name, " url:",url);
         var tile = d3.select("#" + tileid).select("img");
 
         var tile = d3.select("#" + tileid);
@@ -286,12 +305,21 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         var txt=d3.select('#'+tileid).select("#txt-"+tileid);
         txt.innerHTML = title;
 
+        var movie = moviesData.forEach(function(d){
+
+            if( d.movie_title.toLowerCase() == movie_name.toLowerCase()) {
+                console.log("in here assigning url", url);
+                d.src = url;
+            }
+        });
+
+
 
         image.addEventListener('click',function(d){
 
             var movie = moviesData.filter(function(d){
 
-                return d.movie_title.toLowerCase() == title.toLowerCase();
+                return d.movie_title.toLowerCase() == movie_name.toLowerCase();
             });
 
             d3.select('#movie')
@@ -313,7 +341,12 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
             d3.select('#actors')
                 .text(function(){
 
+                    if (movie[0].actor_1_name || movie[0].actor_2_name || movie[0].actor_3_name)
+
                     return 'Actors: ' + movie[0].actor_1_name +' , '+ movie[0].actor_2_name +' , '+ movie[0].actor_3_name;
+
+                    else
+                        return 'Actors: Not Available';
                 });
 
             d3.select('#genre')
