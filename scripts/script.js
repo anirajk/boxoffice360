@@ -133,6 +133,8 @@ function timeline(timelineArray, data){
     var margin = {top: 30, right: 20, bottom: 30, left: 50};
     var actors = [];
 
+    console.log(timelineArray);
+
     //Gets access to the div element created for this chart from HTML
     var divelectoralVotes = d3.select("#timeline"); //.classed("content", true);
     var svgBounds = divelectoralVotes.node().getBoundingClientRect();
@@ -190,6 +192,9 @@ function timeline(timelineArray, data){
 
         var selection = d3.event.selection || 0;//brush.extent();
 
+        console.log(2);
+        console.log(timelineArray);
+
         var yearData = timelineArray.filter(function(d, i){
 
             //console.log(d);
@@ -204,6 +209,7 @@ function timeline(timelineArray, data){
 
         });
 
+        console.log(3);
         console.log(movieData);
 
         var actors = [];
@@ -256,6 +262,8 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     var yearList = [];
     var actors = [];
 
+    console.log(csvData);
+
     csvData.forEach(function(d, i){
 
         //d.actors = d.actor_1_name + ',' + d.actor_2_name + ',' + d.actor_3_name;
@@ -263,6 +271,9 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         d.fy = nodeY * i * Math.random();
 
         d.id = i;
+
+        console.log(yearList.includes(d.title_year));
+
         if(!yearList.includes(d.title_year)) {
 
             yearList.push(d.title_year);
