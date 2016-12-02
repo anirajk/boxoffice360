@@ -20,9 +20,11 @@ button {
     height: 50px;
 }
 
+<<<<<<< HEAD
 .movie-tile span{
     text-align:center;
     display:block;
+=======
 #barChart {
 
     float: left;
@@ -60,4 +62,5 @@ button {
 #movie-tiles {
 
     margin-top: 20px;
+>>>>>>> saving ashwini's changes
 }
