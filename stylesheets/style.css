@@ -35,14 +35,14 @@
     width: 30px;
 }
 
-.nodes circle {
-    stroke: #fff;
-    stroke-width: 1.5px;
+.node circle {
+    stroke: #000;
+    stroke-width: 2px;
 }
 
-html{
-
-    background-color: black;
+html {
+    
+    background-image: url("../img/background-15.jpg");
 }
 
 p {
@@ -52,11 +52,16 @@ p {
 
 .node {
     stroke: #000;
-    stroke-width: 1.5px;
+    stroke-width: 2px;
+}
+
+line {
+    stroke: #000;
+    stroke-width: 2px;
 }
 
 .link {
-    stroke: #999;
-    stroke-width: 1.5px;
+    stroke: #000;
+    stroke-width: 2px;
 }
 

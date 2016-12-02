@@ -16,41 +16,104 @@ function bigBang(csvData, links) {
     var svgHeight = window.innerHeight - margin.top - margin.bottom - 150 ;
 
 
+    var newData = new Object();
+    newData.nodes = csvData;
+    newData.links = links;
+
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    console.log(newData);
+
+
     var svg = d3.select('#bigbangsvg')
         .attr('height', svgHeight)
         .attr('width', svgWidth);
 
 
     var simulation = d3.forceSimulation()
-        .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(svgWidth / 2, svgHeight / 2));
+        .force("charge", d3.forceManyBody().strength(-200))
+        .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(40))
+        .force("center", d3.forceCenter(svgWidth / 2, svgHeight / 2))
+        .on('tick',ticked);
 
     var link = svg.select('#bigbangg')
         .selectAll('.link');
 
 
-    if(links) {
+    simulation
+        .nodes(newData.nodes);
+        /*.attr('title',(function(d){
 
-        console.log('1');
-        simulation.force("link").links(links);
+            return d.movie_title ;
+        }))*/
 
-        link.data(links);
 
-        line.exit()
+
+
+    if(links!=undefined) {
+//
+
+        simulation
+            .force("link")
+            .links(newData.links);
+
+        link = link.data(newData.links);
+
+        link.exit()
             .remove();
 
         link = link.enter()
             .append('line')
-            .merge(link)
-            .attr('class','link');
+            .merge(link);
+
     }
+    /*else {
+
+        simulation
+            .force("link")
+            .links([0]);
+
+        link = link.data([0]);
+
+        link.exit()
+            .remove();
+
+        link = link.enter()
+            .append('line')
+            .merge(link);
+
+    }*/
 
     var node = svg.select("#bigbangg")
         .attr("class", "node")
         .selectAll("circle")
-        .data(csvData);
+        .data(newData.nodes);
 
-    node.exit()
+    node.on('mouseover',function (d) {
+
+            div.text(function () {
+
+                //console.log
+                if(d.tag == 'movie')
+                    return d.movie_title;
+                else
+                    return d.actor;
+            })
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY) + "px")
+                .attr('opacity',0.8);
+        })
+        .on("mouseout", function(d) {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+
+
+    node
+        .exit()
         .remove();
 
     node = node.enter()
@@ -58,29 +121,43 @@ function bigBang(csvData, links) {
         .merge(node);
 
     node.classed('node',true)
-        .attr("r", 5)
+        .attr("r", 7)
         .attr("fill", 'gold');
 
-    simulation
-        .nodes(csvData)
-        /*.attr('title',(function(d){
+    function ticked(){
 
-            return d.movie_title ;
-        }))*/
-        .on('tick', function(){
 
-            node
-                .attr("cx", function(d) { return d.fx; })
-                .attr("cy", function(d) { return d.fy; });
-        });
+        node
+            .attr("cx", function(d) { return svgWidth/2; })
+            .attr("cy", function(d) { return svgHeight/2; })
+            .attr('opacity',0)
+            .attr("cx", function(d) { return d.fx; })
+            .attr("cy", function(d) { return d.fy; })
+            .attr('opacity',1);
+
+        link
+
+            .attr("x1", function (d) {
+            return d.source.x;
+        })
+            .attr("y1", function (d) {
+                return d.source.y;
+            })
+            .attr("x2", function (d) {
+                return d.target.x;
+            })
+            .attr("y2", function (d) {
+                return d.target.y;
+            });
+
+
+
+    }
 
 }
 
 function selectBoxFlooding(movies,actors) {
 
-    console.log("1");
-
-    console.log(actors);
     var list = d3.select('#select')
         .selectAll('option')
         .data(actors);
@@ -109,20 +186,40 @@ function selectBoxFlooding(movies,actors) {
             var actor = [];
             actor.name = d3.select('#select').property('value');
             actor.id = movies.length;
+            actor.tag = 'actor';
+            actor.fx = width/2;
+            actor.fy = height/2;
 
             var links = [];
+
+            movies = movies.filter(function (d) {
+
+                return d.tag == 'movie';
+
+            });
 
             selectedMovies = movies.filter(function(d){
 
                return (d.actor_1_name == actor.name || d.actor_2_name == actor.name || d.actor_3_name == actor.name);
             });
 
-            selectedMovies.push(actor);
+            /*movies.forEach(function(d){
+
+                if(d.actor_1_name == actor.name || d.actor_2_name == actor.name || d.actor_3_name == actor.name){
+
+                    d.source = actor.id;
+                    d.target = d.id;
+                }
+
+            });*/
+            movies.push(actor);
 
             selectedMovies.forEach(function (d) {
 
                 links.push({source: actor.id, target: d.id});
             });
+
+            bigBang(movies,links);
 
         });
 
@@ -132,8 +229,6 @@ function timeline(timelineArray, data){
     //var self = this;
     var margin = {top: 30, right: 20, bottom: 30, left: 50};
     var actors = [];
-
-    console.log(timelineArray);
 
     //Gets access to the div element created for this chart from HTML
     var divelectoralVotes = d3.select("#timeline"); //.classed("content", true);
@@ -192,8 +287,6 @@ function timeline(timelineArray, data){
 
         var selection = d3.event.selection || 0;//brush.extent();
 
-        console.log(2);
-        console.log(timelineArray);
 
         var yearData = timelineArray.filter(function(d, i){
 
@@ -209,16 +302,16 @@ function timeline(timelineArray, data){
 
         });
 
-        console.log(3);
-        console.log(movieData);
-
         var actors = [];
 
         movieData.forEach(function(d){
 
-            actors.push(d.actor_1_name);
-            actors.push(d.actor_2_name);
-            actors.push(d.actor_3_name);
+            if(d.actor_1_name && !actors.includes(d.actor_1_name))
+                actors.push(d.actor_1_name);
+            if(d.actor_2_name && !actors.includes(d.actor_2_name))
+                actors.push(d.actor_2_name);
+            if(d.actor_3_name && !actors.includes(d.actor_3_name))
+                actors.push(d.actor_3_name);
         });
 
         //update the select box and the nodes in the force field
@@ -239,8 +332,18 @@ function timeline(timelineArray, data){
 d3.select('#tab1')
 .on('click',function(){
 
-    d3.select('#content2').attr('class','hide');
-    d3.select('#content1').attr('class','show');
+    d3.select('#content2')
+        .attr('opacity',1)
+        .transition()
+        .duration(3000)
+        .attr('opacity',0)
+        .attr('class','hide');
+    d3.select('#content1')
+        .attr('opacity',0)
+        .transition()
+        .duration(3000)
+        .attr('opacity',1)
+        .attr('class','show');
     d3.select('#tab1').style('background-color','teal');
     d3.select('#tab2').style('background-color','buttonface');
 });
@@ -248,8 +351,18 @@ d3.select('#tab1')
 d3.select('#tab2')
     .on('click',function(){
 
-        d3.select('#content1').attr('class','hide');
-        d3.select('#content2').attr('class','show');
+        d3.select('#content1')
+            .attr('opacity',1)
+            .transition()
+            .duration(3000)
+            .attr('opacity',0)
+            .attr('class','hide');
+        d3.select('#content2')
+            .attr('opacity',0)
+            .transition()
+            .duration(3000)
+            .attr('opacity',1)
+            .attr('class','show');
         d3.select('#tab2').style('background-color','teal');
         d3.select('#tab1').style('background-color','buttonface');
 });
@@ -262,17 +375,20 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     var yearList = [];
     var actors = [];
 
-    console.log(csvData);
-
     csvData.forEach(function(d, i){
 
         //d.actors = d.actor_1_name + ',' + d.actor_2_name + ',' + d.actor_3_name;
-        d.fx = nodeX * i * Math.random();
-        d.fy = nodeY * i * Math.random();
 
+        var x = nodeX * i * Math.random();
+        var y = nodeY * i * Math.random();
+        d.fx = (x < 7)? (x + 7) : x;
+        d.fy = (y < 7)? (y + 7) : y;
+        d.x = nodeX * i * Math.random();
+        d.y = nodeY * i * Math.random();
+
+
+        d.tag = 'movie';
         d.id = i;
-
-        console.log(yearList.includes(d.title_year));
 
         if(!yearList.includes(d.title_year)) {
 
