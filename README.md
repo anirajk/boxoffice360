@@ -3,7 +3,7 @@
 ## Aniraj Kesavan(u0996550) and Ashwini Janamatti(u0996548)
 
 ## Project Video: https://www.youtube.com/watch?v=5-tBBGYqrY0
-## Project Repository: http://github.com/anirajk/boxoffice360
+## Project Repository: https://anirajk.github.io/boxoffice360
 ## [Process boook](./process_book/process_book.pdf)
 
 #Instructions
