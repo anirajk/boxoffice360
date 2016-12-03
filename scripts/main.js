@@ -53,7 +53,7 @@ function updateBarChart(data) {
         .domain([0 , max])
         .range([0,width]);
 
-    console.log('xscale max = '+max);
+   // console.log('xscale max = '+max);
 
     var yScale = d3.scaleBand()
         .range([0, height]).padding(.1);
@@ -180,9 +180,20 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
             }
             buttons.appendChild(but);
             document.getElementById("rating-list").onchange = function() {
-                sortbyrating(yearData, this.value)
-                return false
+                if(this.value=="default"){
+                    sortbyrating(yearData)
+                }else {
+                    sortbyrating(yearData, this.value)
+                }
             };
+            document.getElementById("likes-list").onchange = function() {
+                if(this.value=="default"){
+                    sortbyrating(yearData)
+                }else {
+                    sortbylikes(yearData, this.value)
+                }
+            };
+
 
             updateBarChart(yearData);
 
@@ -192,15 +203,15 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
 });
     function updateVis(yearData, text) {
-        console.log("updating vis with ", yearData.length, " tiles");
-        var requests = yearData.length;
+       // console.log("updating vis with ", yearData.length, " tiles");
+        var requests = (yearData.length<10)?yearData.length:10;
         generateBlanktilesandButtons(yearData.length);
         var i = 0;
         while (requests > 0) {
             //var url = "http://img.omdbapi.com/?i="+yearData[i].movie_imdb_link.split("/")[4]+"&apikey=68e40e34";
             var url = "http://imdb.wemakesites.net/api/" + yearData[i].movie_imdb_link.split("/")[4];
-            if (i==0)
-                console.log("data:",yearData[i])
+            // if (i==0)
+            //     console.log("data:",yearData[i])
             if(yearData[i].image_url!="NA")
                 updateImage("mtile-" + (i + 1).toString(), yearData[i].image_url, yearData[i][text], yearData[i].movie_title);
             else
@@ -221,18 +232,26 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
             updateImage(tileid, response.data.image, title, movie_name)
         })
 
-
     }
 
     function generateBlanktilesandButtons(n) {
+        for (var i=0;i<10;i++){
+            updateImage("mtile-"+(i+1).toString(), "img/blank.png", "No matches", "No matches")
+        }
         //console.log("generating ", n, " blank tiles");
         var mtiles = d3.select("movie-tiles");
-        mtiles.selectAll("div").remove();
-        for (var i=0;i<n;i++){
-            mtiles.append("div")
-                .attribute("id", "mtile-"+(i+1).toString())
-                .classed("movie-tile", true);
-       }
+        mtiles.selectAll("svg").remove();
+        for (var i=0;i<10;i++){
+            if (n<i){
+                var tile=d3.select("#mtile-")
+            }
+            var tile=d3.select("#mtile-"+(i+1).toString());
+            tile.append("img");
+            tile.append("text")
+                .text("Please Wait");
+
+        }
+
     }
 
     function sortbyrating(yearData,ratings) {
@@ -240,8 +259,8 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         console.log('len before',yearData.length);
         if (ratings!=null){
            yearData = yearData.filter(function (d) {
-                console.log("limits", ratings, parseFloat(ratings+1));
-                console.log("score", parseFloat(d.imdb_score));
+                // console.log("limits", ratings, parseFloat(ratings+1));
+                // console.log("score", parseFloat(d.imdb_score));
                 return parseFloat(d.imdb_score) > ratings && parseFloat(d.imdb_score) < parseFloat(ratings+1)
             })
             generateBlanktilesandButtons(yearData.length);
@@ -253,7 +272,18 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         updateVis(yearData, "imdb_score");
     }
 
-    function sortbylikes(yearData) {
+    function sortbylikes(yearData, likes) {
+        likes = parseInt(likes) | null;
+        console.log('len before',yearData.length);
+        if (likes!=null){
+            yearData = yearData.filter(function (d) {
+                // console.log("limits", likes, parseFloat(likes+1));
+                // console.log("score", parseFloat(d.imdb_score));
+                return parseInt(d.movie_facebook_likes) > likes && parseInt(d.movie_facebook_likes) < parseInt(likes*10)
+            })
+            generateBlanktilesandButtons(yearData.length);
+        }
+        console.log('len after', yearData.length);
         yearData.sort(function (x, y) {
             return d3.descending(parseInt(x.movie_facebook_likes), parseInt(y.movie_facebook_likes));
         });
@@ -278,33 +308,35 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     }
 
     function updateImage(tileid, url, title, movie_name) {
-        //console.log("updating " + tileid + " with ", title, " for movie name",movie_name, " url:",url);
-        var tile = d3.select("#" + tileid).select("img");
-
+        console.log("updating " + tileid + " with ", title, " for movie name",movie_name, " url:",url);
         var tile = d3.select("#" + tileid);
         tile.classed("movie-tile", true);
-        var image = document.getElementById(tileid).firstChild;
-        var downloadingImage = new Image();
-        downloadingImage.onload = function () {
-            image.src = this.src;
-            image.alt = title;
-            image.title = title;
-        };
-        downloadingImage.src = url;
-        var txt=d3.select('#'+tileid).select("#txt-"+tileid);
-        txt.innerHTML = title;
+
+        tile.attr("src", url)
+            .attr('title',title);
+        // var image = tile;
+        // var downloadingImage = new Image();
+        // downloadingImage.onload = function () {
+        //     image.src = this.src;
+        //     image.alt = title;
+        //     image.title = title;
+        // };
+        //
+        // downloadingImage.src = url;
+        // var txt=d3.select('#'+tileid).select("#txt-"+tileid);
+        // txt.innerHTML = title;
 
         var movie = moviesData.forEach(function(d){
 
             if( d.movie_title.toLowerCase() == movie_name.toLowerCase()) {
-                console.log("in here assigning url", url);
+             //   console.log("in here assigning url", url);
                 d.src = url;
             }
         });
 
 
 
-        image.addEventListener('click',function(d){
+        tile.on('click',function(d){
 
             var movie = moviesData.filter(function(d){
 
