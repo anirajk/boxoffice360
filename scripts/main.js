@@ -376,7 +376,7 @@ function updateImage(tileid, url, title, movie_name) {
         d3.select('#budget')
             .text(function(){
 
-                return 'Budget: $' + movie[0].budget;
+                return 'Gross: $' + movie[0].budget;
             });
 
     });

@@ -5,7 +5,6 @@
 
 var height = window.innerHeight - 60;
 var width = d3.select("#bigbang").node().getBoundingClientRect().width - 70;
-var selectedMovies = [];
 var force =  new Object();
 var div = d3.select("body").append("div")
     .attr("class", "tooltip")
@@ -303,8 +302,13 @@ function timeline(timelineArray, data){
         })
         .on('click',function (d) {
 
-            console.log(d);
+            d3.selectAll('.hightlightedrect')
+                .attr('class','');
 
+           d3.select(this)
+               .attr('class','hightlightedrect');
+
+           console.log(this);
             brushed(d);
         });
 
@@ -442,6 +446,22 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     var nodeY = height/csvData.length;
     var yearList = [];
     var actors = [];
+var moviesData = [];
+    csvData.forEach(function (d) {
+        var i,count=0;
+        for (i=0;i<moviesData.length;i++){
+            if (d.movie_title == moviesData[i].movie_title){
+                count++;
+                if(count)
+                    break;
+            }
+        }
+        if ( count == 0){
+            moviesData.push(d);
+        }
+    });
+
+    csvData = moviesData;
 
 
 

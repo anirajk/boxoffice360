@@ -15,6 +15,18 @@
 
 }
 
+.hightlightedrect {
+
+
+    fill: maroon;
+}
+
+p{
+
+    margin: 10px;
+    text-align: center;
+}
+
 rect {
 
     fill: teal;
