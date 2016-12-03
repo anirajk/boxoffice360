@@ -110,63 +110,14 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     var yearList = [];
     moviesData = csvData;
     $.ajaxSetup({async:false});
-    $.getJSON("data/enriched_data.json", function () {
+    $.getJSON("data/merged_data.json", function () {
         
     }).done(function (response) {
-        jSONData=response;
+        moviesData=response;
     });
     $.ajaxSetup({async:true});
-    moviesData.forEach(function (d) {
-        var i,count=0;
-        for (i=0;i<moviesData.length;i++){
-            if (d.movie_imdb_link == moviesData[i].movie_imdb_link){
-                count++;
-            }
-        }
-        if ( count == 0){
-            moviesData.push(d);
-        }else if (count>0){
-            console.log('dup');[]
-        }else{
-            console.log('shit broke');
-        }
-    });
-    console.log("csv data elem", moviesData[0]);
-    console.log("json data elem", jSONData[0]);
-    for (var i=0;i<moviesData.length;i++){
-        moviesData[i].directors = "NA";
-        moviesData[i].image_url = "NA";
-        moviesData[i].review = "NA";
-        moviesData[i].cast = "NA";
-        moviesData[i].plot = "NA";
-        moviesData[i].awards = "NA";
-        moviesData[i].metascore = "NA";
-        moviesData[i].rated = "NA";
-        moviesData[i].totalvotes = "NA";
-        moviesData[i].writer = "NA";
-        moviesData[i].languages = "NA";
-    }
-    console.log(jSONData[4765]);
-    for (var i=0;i<moviesData.length;i++){
-        for(var j=0;j<jSONData.length;j++){
-            if(moviesData[i].movie_imdb_link.split("/")[4]==jSONData[j].id){
-                moviesData[i].directors = jSONData[j].directors?jSONData[j].directors:"NA";
-                moviesData[i].image_url = jSONData[j].image_url?jSONData[j].image_url:"NA"  ;
-                moviesData[i].review = jSONData[j].review?jSONData[j].image_url:"NA";
-                moviesData[i].cast = jSONData[j].cast?jSONData[j].cast:"NA";
-                moviesData[i].plot = jSONData[j].plot?jSONData[j].plot:"NA";
-                moviesData[i].awards = jSONData[j].awards?jSONData[j].awards:"NA";
-                moviesData[i].metascore = jSONData[j].metascore?jSONData[j].metascore:"NA";
-                moviesData[i].rated = jSONData[j].rated?jSONData[j].rated:"NA";
-                moviesData[i].totalvotes = jSONData[j].totalvotes?jSONData[j].totalvotes:"NA";
-                moviesData[i].writer = jSONData[j].writer?jSONData[j].writer:"NA";
-                moviesData[i].languages = jSONData[j].languages?jSONData[j].languages:"NA";
-                // console.log("processed",(i+1).toString(), "rhs ",j);
-            }
-        }
-    }
-    console.log("moviedata len",moviesData.length);
-    console.log("merged data elem", moviesData[0]);
+    console.log(moviesData.length);
+    console.log(moviesData[0]);
     // yearList = moviesData.filter(function(d,i))
     moviesData.forEach(function (d, i) {
         if(!yearList.includes(d.title_year) && d.title_year) {
