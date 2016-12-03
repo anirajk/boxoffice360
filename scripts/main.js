@@ -193,13 +193,14 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         generateBlanktilesandButtons(yearData.length);
         var i = 0;
         while (requests > 0) {
+            //var url = "http://img.omdbapi.com/?i="+yearData[i].movie_imdb_link.split("/")[4]+"&apikey=68e40e34";
             var url = "http://imdb.wemakesites.net/api/" + yearData[i].movie_imdb_link.split("/")[4];
             if (i==0)
                 console.log("data:",yearData[i])
-            if(yearData[i].image_url)
+            if(yearData[i].image_url!="NA")
                 updateImage("mtile-" + (i + 1).toString(), yearData[i].image_url, yearData[i][text], yearData[i].movie_title);
             else
-                console.log("broke");
+                updateTile(url, "mtile-" + (i + 1).toString(), yearData[i][text], yearData[i].movie_title);
             i++;
             requests--;
         }
@@ -210,6 +211,8 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         var req = $.getJSON(url, function (response) {
             if (tileid=="mtile-1")
                 console.log("response data:", response.data);
+        }).fail(function () {
+            updateImage(tileid, "img/blank.png", title, movie_name)
         });
         $.when(req).done(function (response) {
             updateImage(tileid, response.data.image, title, movie_name)
