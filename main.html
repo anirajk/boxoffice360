@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Box Office 360</title>
-    <script src="https://d3js.org/d3.v4.js"></script>
     <link rel="stylesheet" href="stylesheets/style.css"/>
+    <link rel="stylesheet" href="css/d3.slider.css"/>
+    <link rel="stylesheet" href="css/peryear.css"/>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <!--script src="scripts/generate_data.js"></script-->
+
+    <script src="scripts/d3.slider.js"></script>
+    <script src="scripts/main.js"></script>
 
 
 </head>
@@ -42,9 +50,46 @@
     </div>
 </div>
 <div id="content2" class="hide">
-    <p>A bunch of stuff</p>
-    <div id="detailedStats"></div>
-</div>
+    <div id="year-slider"></div>
+
+    <div id="firstDiv">
+        <div id="barChart">
+            <svg id="barChartsvg">
+                <g id="barChartg">
+
+                </g>
+            </svg>
+        </div>
+
+        <div id="details">
+            <div id="movie"></div>
+            <div id="director"></div>
+            <div id="actors"></div>
+            <div id="genre"></div>
+        </div>
+    </div>
+
+
+    <div id="sort-buttons"></div>
+
+    <div id="movie-tiles">
+        <div id="tiles-large">
+            <img class="movie-tile" id="mtile-1" src="img/blank.png">
+            <img class="movie-tile" id="mtile-2" src="img/blank.png">
+            <img class="movie-tile" id="mtile-3" src="img/blank.png">
+            <img class="movie-tile" id="mtile-4" src="img/blank.png">
+        </div>
+        <div id="tiles-small">
+            <img class="movie-tile" id="mtile-5" src="img/blank.png">
+            <img class="movie-tile" id="mtile-6" src="img/blank.png">
+            <img class="movie-tile" id="mtile-7" src="img/blank.png">
+            <img class="movie-tile" id="mtile-8" src="img/blank.png">
+            <img class="movie-tile" id="mtile-9" src="img/blank.png">
+            <img class="movie-tile" id="mtile-10" src="img/blank.png">
+        </div>
+        </div>
+
+    </div>
 
 </div>
 

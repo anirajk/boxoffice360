@@ -4,14 +4,11 @@ import SimpleHTTPServer
 class CORSHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def send_head(self):
         """Common code for GET and HEAD commands.
-
         This sends the response code and MIME headers.
-
         Return value is either a file object (which has to be copied
         to the outputfile by the caller unless the command was HEAD,
         and must be closed by the caller under all circumstances), or
         None, in which case the caller has nothing further to do.
-
         """
         path = self.translate_path(self.path)
         f = None
@@ -45,6 +42,8 @@ class CORSHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.send_header("Last-Modified", self.date_time_string(fs.st_mtime))
         self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
+	print 'headers'
+	print self.headers
         return f
 
 

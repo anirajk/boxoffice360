@@ -45,6 +45,7 @@ html {
     
     background-image: url("../img/light-green-website-plain-background-for-website-560540430.jpg");
     background-size:cover;
+
 }
 
 p {
@@ -87,7 +88,7 @@ line {
     margin-right: 10%;
 }
 
-#wrapper div, select{
+#content1 div, select{
 
     margin-top : 20px;
     margin-left: 20px;
@@ -112,7 +113,7 @@ div.tooltip {
     pointer-events: none;
 }
 
-#wrapper select {
+#content1 select {
 
     margin-left:45% ;
     width: 150px;

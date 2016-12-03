@@ -1,8 +1,114 @@
-.movie-tile img {
+#movie-tiles img {
     width:250px;
     height:250px;
     background: url(../img/loading.gif) 50% no-repeat;
     border: 1px solid black;
     border-radius: 5px;
 
+}
+
+img {
+    width:250px;
+    height:250px;
+}
+
+#barChart {
+
+    float: left;
+    display: inline-block;
+    width: 650px;
+    height: 450px;
+    margin-top: 10px;
+    border: 1.5px solid;
+}
+
+#year-slider {
+
+
+    width: 1200px;
+    color: #fff;
+
+}
+
+
+.mtile-large {
+    width:250px;
+    height:250px;
+    background: url(../img/loading.gif) 50% no-repeat;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: auto;
+}
+
+
+.mtile-small {
+    width:125px;
+    height:125px;
+    background: url(../img/loading.gif) 50% no-repeat;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: auto;
+}
+
+button {
+    width: 250px;
+    height: 50px;
+}
+
+#movie-tile span{
+    text-align:center;
+    display:block;
+    height: 450px;
+    border: 1.5px solid;
+}
+
+.bars {
+
+    fill: #B30424;
+}
+
+#movie-tiles {
+
+
+    margin-top: 20px;
+}
+
+#firstDiv{
+
+    height: auto;
+}
+#details {
+
+    display: inline-block;
+    width: 450px;
+    height: 450px;
+    margin-left: 10px;
+
+    border: 1.5px solid;
+    margin-top: 10px;
+
+}
+
+#firstDiv{
+
+
+    height: 450px;
+
+}
+
+#details div{
+
+    margin-top: 10px;
+    color: steelblue;
+    font-family: "Comic Sans MS";
+}
+
+#sort-buttons {
+
+    margin-top: 20px;
+}
+
+#content2 > div {
+
+    margin-top: 20px;
 }
