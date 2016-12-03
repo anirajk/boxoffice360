@@ -110,7 +110,6 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
     }
 
 
-
     function writejson(data) {
         console.log("final data len:", data.length);
         console.log(data);
