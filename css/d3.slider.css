@@ -39,6 +39,7 @@ Inspired from http://sujeetsr.github.io/d3.slider/stylesheets/d3.slider.css
 
 .d3slider text {
     font: 10px sans-serif;
+    color: #fff;
 }
 
 .tick.minor text {
@@ -63,6 +64,10 @@ Inspired from http://sujeetsr.github.io/d3.slider/stylesheets/d3.slider.css
 .dragger line {
     stroke: #aa0000;
     fill: none;
+}
+.dragger text {
+
+    fill: #fff;
 }
 
 .dragger-outer {

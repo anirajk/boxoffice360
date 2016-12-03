@@ -412,7 +412,7 @@ d3.select('#tab1')
             .duration(3000)
             .attr('opacity',1)
             .attr('class','show');
-        d3.select('#tab1').style('background-color','teal');
+        d3.select('#tab1').style('background-color','steelblue');
         d3.select('#tab2').style('background-color','buttonface');
     });
 
@@ -431,7 +431,7 @@ d3.select('#tab2')
             .duration(3000)
             .attr('opacity',1)
             .attr('class','show');
-        d3.select('#tab2').style('background-color','teal');
+        d3.select('#tab2').style('background-color','steelblue');
         d3.select('#tab1').style('background-color','buttonface');
     });
 

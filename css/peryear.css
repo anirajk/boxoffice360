@@ -1,7 +1,5 @@
 #movie-tiles img {
-    width:250px;
-    height:250px;
-    background: url(../img/loading.gif) 50% no-repeat;
+    background: url(../img/blank.png) 50% no-repeat;
     border: 1px solid black;
     border-radius: 5px;
 
@@ -22,19 +20,45 @@ img {
     border: 1.5px solid;
 }
 
+.axis path,
+.axis line {
+    stroke: #fff;
+    fill: #fff;
+    stroke-width: 1px;
+}
+.axis text {
+    font-family: serif;
+    font-size: 14px;
+}
+
+#barChartsvg {
+
+    width: 650px;
+    height: 450px;
+}
+
+Strong {
+
+    color: teal;
+}
+
 #year-slider {
 
 
     width: 1200px;
-    color: #fff;
 
+}
+
+.tick text{
+
+    fill: #fff;
 }
 
 
 .mtile-large {
     width:250px;
     height:250px;
-    background: url(../img/loading.gif) 50% no-repeat;
+    background: url(../img/blank.png) 50% no-repeat;
     border: 1px solid black;
     border-radius: 5px;
     margin-bottom: auto;
@@ -42,9 +66,9 @@ img {
 
 
 .mtile-small {
-    width:125px;
+    width:165px;
     height:125px;
-    background: url(../img/loading.gif) 50% no-repeat;
+    background: url(../img/blank.png) 50% no-repeat;
     border: 1px solid black;
     border-radius: 5px;
     margin-bottom: auto;
@@ -64,7 +88,7 @@ button {
 
 .bars {
 
-    fill: #B30424;
+    fill: teal;
 }
 
 #movie-tiles {
@@ -99,7 +123,8 @@ button {
 #details div{
 
     margin-top: 10px;
-    color: steelblue;
+    color: teal;
+    font-weight: bold;
     font-family: "Comic Sans MS";
 }
 

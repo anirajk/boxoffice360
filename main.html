@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Box Office 360</title>
-    <link rel="stylesheet" href="stylesheets/style.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
     <link rel="stylesheet" href="css/d3.slider.css"/>
     <link rel="stylesheet" href="css/peryear.css"/>
     <script src="https://d3js.org/d3.v4.js"></script>
@@ -53,19 +53,26 @@
     <div id="year-slider"></div>
 
     <div id="firstDiv">
+
         <div id="barChart">
-            <svg id="barChartsvg">
+            <Strong>Top 5 Highest Grossing Movies of the Year</Strong>
+             <svg id="barChartsvg">
                 <g id="barChartg">
 
                 </g>
+                 <g id="xAxis"></g>
             </svg>
         </div>
 
+
         <div id="details">
+
+            <Strong>Details: </Strong>
             <div id="movie"></div>
             <div id="director"></div>
             <div id="actors"></div>
             <div id="genre"></div>
+            <div id="budget"></div>
         </div>
     </div>
 
@@ -74,18 +81,18 @@
 
     <div id="movie-tiles">
         <div id="tiles-large">
-            <img class="movie-tile" id="mtile-1" src="img/blank.png">
-            <img class="movie-tile" id="mtile-2" src="img/blank.png">
-            <img class="movie-tile" id="mtile-3" src="img/blank.png">
-            <img class="movie-tile" id="mtile-4" src="img/blank.png">
+            <img class="movie-tile mtile-large" id="mtile-1" src="img/blank.png">
+            <img class="movie-tile mtile-large" id="mtile-2" src="img/blank.png">
+            <img class="movie-tile mtile-large" id="mtile-3" src="img/blank.png">
+            <img class="movie-tile mtile-large" id="mtile-4" src="img/blank.png">
         </div>
         <div id="tiles-small">
-            <img class="movie-tile" id="mtile-5" src="img/blank.png">
-            <img class="movie-tile" id="mtile-6" src="img/blank.png">
-            <img class="movie-tile" id="mtile-7" src="img/blank.png">
-            <img class="movie-tile" id="mtile-8" src="img/blank.png">
-            <img class="movie-tile" id="mtile-9" src="img/blank.png">
-            <img class="movie-tile" id="mtile-10" src="img/blank.png">
+            <img class="movie-tile mtile-small" id="mtile-5" src="img/blank.png">
+            <img class="movie-tile mtile-small" id="mtile-6" src="img/blank.png">
+            <img class="movie-tile mtile-small" id="mtile-7" src="img/blank.png">
+            <img class="movie-tile mtile-small" id="mtile-8" src="img/blank.png">
+            <img class="movie-tile mtile-small" id="mtile-9" src="img/blank.png">
+            <img class="movie-tile mtile-small" id="mtile-10" src="img/blank.png">
         </div>
         </div>
 

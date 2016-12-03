@@ -1,7 +1,11 @@
 var sortkeys = ["Sort by Rating", "Sort by Movie Facebook Likes", "Sort by Budget", "Sort by Duration"];
 var selectedYear=1985;
-var moviesData;
-var jSONData;
+var moviesData = [];
+
+var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
 
 function updateBarChart(data) {
 
@@ -13,7 +17,7 @@ function updateBarChart(data) {
 
 
     var width = xAxisWidth - margin.left - margin.right;
-    var height = yAxisHeight - margin.top - margin.bottom;
+    var height = yAxisHeight - margin.top - margin.bottom - 20;
 
 
     svg.attr('width', width)
@@ -34,29 +38,46 @@ function updateBarChart(data) {
         return d.gross;
     })        ;
 
+    var min = d3.min (top5HighGrossingData, function (d) {
+
+        return d.gross;
+    });
 
     var xScale = d3.scaleLinear()
         .domain([0 , max])
         .range([0,width]);
 
-    console.log('xscale max = '+max);
+
 
     var yScale = d3.scaleBand()
-        .range([0, height]).padding(.1);
+        .range([0, height]).padding(.1)
+        .domain(data.map(function (d) {
+            return d.movie_title;
+        }));
 
     var xAxis = d3.axisBottom();
     xAxis.scale(xScale);
 
 
-    yScale.domain(data.map(function (d) {
-        return d.movie_title;
-    }));
 
-    var yHeight = (450 - margin.top - margin.bottom)/5;
+    var textWidth = 80;
+    svg.select("#xAxis")
+        .classed("axis", true)
+        .attr("transform", "translate(" + (margin.left+margin.right) + "," + (height-25) + ")")
+        .call(xAxis)
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-45)" );
+
+
+    var yHeight = (height)/6;
 
     var bars = d3.select('#barChartg')
         .selectAll('.bars')
         .data(top5HighGrossingData);
+
 
     bars.exit()
         .remove();
@@ -67,7 +88,41 @@ function updateBarChart(data) {
 
     var textWidth = 80;
 
-    bars.attr('class','bars')
+    bars.on('mouseover',function(d){
+        div.text(function () {
+
+
+
+                return 'Movie '+ d.movie_title  + ', Budget : $' + d.gross;
+
+        })
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY-20) + "px")
+            .style('opacity', 0.9);
+    })
+        .on("mouseout", function () {
+            div.style("opacity", 0);
+        })
+        .attr('class','bars')
+        .attr('x', textWidth)
+        .attr('y', function(d,i){
+
+            if(i==0)
+                return 0;
+            else
+                return (yHeight + 4)*i;
+        })
+        .attr('width',function (d) {
+
+            return xScale(0);
+        })
+        .attr('height', function (d) {
+
+            return yHeight;
+
+        })
+        .transition()
+        .duration(3000)
         .attr('x', textWidth)
         .attr('y', function(d,i){
 
@@ -89,22 +144,34 @@ function updateBarChart(data) {
 
         });
 
+
+
 }
 
 
-d3.csv("data/movie_metadata.csv", function (error, csvData) {
+d3.json("data/merged_data.json", function (error, csvData) {
     var yearList = [];
-    moviesData = csvData;
-    $.ajaxSetup({async:false});
-    $.getJSON("data/merged_data.json", function () {
 
-    }).done(function (response) {
-        moviesData=response;
-    });
+
+
     $.ajaxSetup({async:true});
-    console.log(moviesData.length);
-    console.log(moviesData[0]);
-    // yearList = moviesData.filter(function(d,i))
+
+    csvData.forEach(function (d) {
+        var i,count=0;
+        for (i=0;i<moviesData.length;i++){
+            if (d.movie_title == moviesData[i].movie_title){
+                count++;
+                if(count)
+                    break;
+            }
+        }
+        if ( count == 0){
+            moviesData.push(d);
+        }
+    });
+
+
+
     moviesData.forEach(function (d, i) {
         if(!yearList.includes(d.title_year) && d.title_year) {
             yearList.push(d.title_year);
@@ -112,7 +179,6 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
 
     });
-    console.log("years",yearList.length)
 
     yearList.sort();
 
@@ -133,6 +199,14 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
         var yearData = moviesData.filter(function (d) {
             return d.title_year == year;
         });
+
+        for(var i=1;i<=10;i++){
+
+            d3.select('#mtile-' + i)
+                .attr('src','img/blank.png')
+                .attr('title','');
+
+        }
         if (yearData.length >= 1) {
             updateVis(yearData, "movie_title");
         }
@@ -175,15 +249,18 @@ d3.csv("data/movie_metadata.csv", function (error, csvData) {
 
 });
 function updateVis(yearData, text) {
-    console.log("updating vis with ", yearData.length, " tiles");
-    var requests = yearData.length;
-    generateBlanktilesandButtons(yearData.length);
+
+    var requests = (yearData.length<10)?yearData.length:10;
+
+    //generateBlanktilesandButtons(yearData.length);
     var i = 0;
     while (requests > 0) {
         //var url = "http://img.omdbapi.com/?i="+yearData[i].movie_imdb_link.split("/")[4]+"&apikey=68e40e34";
         var url = "http://imdb.wemakesites.net/api/" + yearData[i].movie_imdb_link.split("/")[4];
-        if (i==0)
-            console.log("data:",yearData[i])
+        d3.select('#mtile-'+(i+1))
+            .attr('src','img/loading.gif')
+            .attr('title', 'loading...');
+
         if(yearData[i].image_url!="NA")
             updateImage("mtile-" + (i + 1).toString(), yearData[i].image_url, yearData[i][text], yearData[i].movie_title);
         else
@@ -196,8 +273,7 @@ function updateVis(yearData, text) {
 
 function updateTile(url, tileid, title, movie_name ) {
     var req = $.getJSON(url, function (response) {
-        if (tileid=="mtile-1")
-            console.log("response data:", response.data);
+
     }).fail(function () {
         updateImage(tileid, "img/blank.png", title, movie_name)
     });
@@ -208,23 +284,6 @@ function updateTile(url, tileid, title, movie_name ) {
 
 }
 
-function generateBlanktilesandButtons(n) {
-    //console.log("generating ", n, " blank tiles");
-    var mtiles = d3.select("movie-tiles");
-    mtiles.selectAll("svg").remove();
-    for (var i=0;i<10;i++){
-        if (n<i){
-            var tile=d3.select("#mtile-")
-        }
-        var tile=d3.select("#mtile-"+(i+1).toString());
-        tile.append("img");
-        tile.append("text")
-            .text("Please Wait");
-
-    }
-
-
-}
 
 function sortbyrating(yearData) {
     yearData.sort(function (x, y) {
@@ -258,37 +317,27 @@ function sortbyduration(yearData) {
 }
 
 function updateImage(tileid, url, title, movie_name) {
-    console.log("updating " + tileid + " with ", title, " for movie name",movie_name, " url:",url);
-    var tile = d3.select("#" + tileid).select("img");
 
     var tile = d3.select("#" + tileid);
-    tile.classed("movie-tile", true);
-    var image = document.getElementById(tileid).firstChild;
-    var downloadingImage = new Image();
-    downloadingImage.onload = function () {
-        image.src = this.src;
-        image.alt = title;
-        image.title = title;
-    };
-    downloadingImage.src = url;
-    var txt=d3.select('#'+tileid).select("#txt-"+tileid);
-    txt.innerHTML = title;
+
+    tile.attr("src", url)
+        .attr('title',title);
 
     var movie = moviesData.forEach(function(d){
 
         if( d.movie_title.toLowerCase() == movie_name.toLowerCase()) {
-            console.log("in here assigning url", url);
+
             d.src = url;
         }
     });
 
 
 
-    image.addEventListener('click',function(d){
+    tile.on('click',function(d){
 
-        var movie = moviesData.filter(function(d){
+        var movie = moviesData.filter(function(e){
 
-            return d.movie_title.toLowerCase() == movie_name.toLowerCase();
+            return e.movie_title.toLowerCase() == movie_name.toLowerCase();
         });
 
         d3.select('#movie')
@@ -322,6 +371,12 @@ function updateImage(tileid, url, title, movie_name) {
             .text(function(){
 
                 return 'Genre: ' + movie[0].genres;
+            });
+
+        d3.select('#budget')
+            .text(function(){
+
+                return 'Budget: $' + movie[0].budget;
             });
 
     });
